@@ -108,16 +108,64 @@ def get_top_clients():
 
 @app.route('/api/top-team-members')
 def get_top_team_members():
-    return           
+    year = request.args.get('year')
+    month = request.args.get('month')
+    branch = request.args.get('store')
+
+    query = """
+    SELECT "Team member", SUM("Total sales") as MonthlySales
+    FROM sales_data
+    WHERE Store = ?
+        AND strftime('%Y', Date) = ?
+        AND strftime('%m', Date) = ?
+    GROUP BY "Team member"
+    ORDER BY MonthlySales DESC
+    LIMIT 5
+    """
+    args= (branch,year, month)
+    top_members = query_db(query, args)
+    return  jsonify(top_members)      
  
 @app.route('/api/sales-by-category')
 def get_sales_by_category():
-    return            
+    year = request.args.get('year')
+    month = request.args.get('month')
+    branch = request.args.get('store')
+
+    query = """
+    SELECT Category, SUM("Total sales") as MonthlySales
+    FROM sales_data
+    WHERE Store = ?
+        AND strftime('%Y', Date) = ?
+        AND strftime('%m', Date) = ?
+    GROUP BY Category
+    ORDER BY MonthlySales DESC
+    LIMIT 5
+    """
+    args= (branch,year, month)
+    category_sales = query_db(query, args)
+    return  jsonify(category_sales)           
 
  
 @app.route('/api/sales-by-channel')
 def get_sales_by_channel():
-    return            
+    year = request.args.get('year')
+    month = request.args.get('month')
+    branch = request.args.get('store')
+
+    query = """
+    SELECT Channel, COUNT(DISTINCT ("Sale no.")) as "Customer Count"
+    FROM sales_data
+    WHERE Store = ?
+        AND strftime('%Y', Date) = ?
+        AND strftime('%m', Date) = ?
+    GROUP BY Channel
+    ORDER BY "Customer Count" DESC
+    """
+  
+    args= (branch,year, month)
+    channel_sales = query_db(query, args)
+    return  jsonify(channel_sales)                  
 
 
 if __name__ == "__main__":
