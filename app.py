@@ -72,11 +72,39 @@ def get_daily_sales():
 
 @app.route('/api/monthly-sales')
 def get_monthly_sales():
-    return 
+    year = request.args.get('year')
+    branch = request.args.get('store')
+
+    query = """
+        SELECT strftime('%m', Date) as Month, SUM("Total sales") as MonthlySales
+        FROM sales_data 
+        WHERE Store = ? 
+            AND strftime('%Y', Date) = ?  
+         GROUP BY Month
+        """
+    args = (branch,year)
+    yearly_sales = query_db(query,args)
+    return jsonify(yearly_sales)
 
 @app.route('/api/top-clients')
 def get_top_clients():
-    return            
+    year = request.args.get('year')
+    month = request.args.get('month')
+    branch = request.args.get('store')
+
+    query = """
+        SELECT Client, SUM("Total sales") as MonthlySales
+        FROM sales_data 
+        WHERE Store = ? 
+            AND strftime('%Y', Date) = ? 
+            AND strftime('%m', Date) = ? 
+        GROUP BY Client
+        ORDER BY MonthlySales DESC
+        LIMIT 5 
+        """
+    args = (branch,year, month)
+    top_clients = query_db(query,args)
+    return jsonify(top_clients)          
 
 @app.route('/api/top-team-members')
 def get_top_team_members():

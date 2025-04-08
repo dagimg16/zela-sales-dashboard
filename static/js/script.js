@@ -1,5 +1,6 @@
 // Wait until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
+    console.log("Dashboard JS is now running!");
 
     const totalSalesBox = document.getElementById("totalSalesBox");
     const salesAmount = document.getElementById("salesAmount");
@@ -13,9 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     monthlySalesBox.addEventListener("click",()=>{
-        fetch('/api/daily-sales?year=2025&month=04&store=1').then(res => res.json()).then(data=>{
+        fetch('/api/top-clients?year=2025&month=03&store=1').then(res => res.json()).then(data=>{
             console.log(data)
-            monthlySalesAmount.textContent = `$${data[1].DailySales.toLocaleString()}`;
+            monthlySalesAmount.textContent = `$${data[0].MonthlySales.toLocaleString()}`;
         });
     });
 
