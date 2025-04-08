@@ -1,0 +1,10 @@
+.custom-jumbotron {
+    background-color: #f6e1f2;
+}  
+
+.form-select {
+    background-color: #eccde7;
+    border-radius: 1rem;
+    padding: .2rem 2.2rem;
+    font-size: 1rem;
+  }

@@ -121,4 +121,5 @@ def get_sales_by_channel():
 
 
 if __name__ == "__main__":
-    app.run(debug = True, port=5002)
+    debug_mode = os.environ.get('FLASK_ENV') == 'development'
+    app.run(debug=debug_mode)
