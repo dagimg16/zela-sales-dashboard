@@ -54,7 +54,21 @@ def get_kpis():
 
 @app.route('/api/daily-sales')
 def get_daily_sales():
-    return
+    year = request.args.get('year')
+    month = request.args.get('month')
+    branch = request.args.get('store')
+
+    query = """
+        SELECT strftime('%d', Date) as Day, SUM("Total sales") as DailySales
+        FROM sales_data 
+        WHERE Store = ? 
+            AND strftime('%Y', Date) = ? 
+            AND strftime('%m', Date) = ? 
+         GROUP BY Day
+        """
+    args = (branch,year, month)
+    daily_sales = query_db(query,args)
+    return jsonify(daily_sales)
 
 @app.route('/api/monthly-sales')
 def get_monthly_sales():
@@ -79,4 +93,4 @@ def get_sales_by_channel():
 
 
 if __name__ == "__main__":
-    app.run(debug = True)
+    app.run(debug = True, port=5002)

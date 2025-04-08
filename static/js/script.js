@@ -13,9 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     monthlySalesBox.addEventListener("click",()=>{
-        fetch('/api/kpis?year=2025&month=04&store=1').then(res => res.json()).then(data=>{
+        fetch('/api/daily-sales?year=2025&month=04&store=1').then(res => res.json()).then(data=>{
             console.log(data)
-            monthlySalesAmount.textContent = `$${data[0].TotalSales.toLocaleString()}`;
+            monthlySalesAmount.textContent = `$${data[1].DailySales.toLocaleString()}`;
         });
     });
 
