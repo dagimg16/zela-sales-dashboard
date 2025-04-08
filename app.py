@@ -35,7 +35,22 @@ def get_total_sales():
 
 @app.route('/api/kpis')
 def get_kpis():
-    return
+    year = request.args.get('year')
+    month = request.args.get('month')
+    branch = request.args.get('store')
+
+    query = """
+        SELECT strftime('%m', Date) as Month, SUM("Total sales") as TotalSales
+        FROM sales_data 
+        WHERE Store = ? 
+            AND strftime('%Y', Date) = ? 
+            AND strftime('%m', Date) = ? 
+         GROUP BY Month
+        """
+    args = (branch,year, month)
+    total_sales = query_db(query,args)
+
+    return jsonify(total_sales)
 
 @app.route('/api/daily-sales')
 def get_daily_sales():
