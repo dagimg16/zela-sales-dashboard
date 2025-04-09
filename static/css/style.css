@@ -2,9 +2,20 @@
     background-color: #f6e1f2;
 }  
 
-.form-select {
+/* .form-select {
     background-color: #eccde7;
     border-radius: 1rem;
     padding: .2rem 2.2rem;
     font-size: 1rem;
-  }
+    text-align: left !important;
+  } */
+
+.form-select {
+    background-color: #eccde7;
+    border-radius: 2rem;
+    padding: 0.1rem 0.75rem;
+    font-size: 1rem;
+    text-align: left !important;
+    direction: ltr;
+    width: 80px; 
+}

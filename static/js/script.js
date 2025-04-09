@@ -1,50 +1,54 @@
+
+let selectedStore = 1;
+let selectedYear = 2025;
+let selectedMonth = "04";
+
 // Wait until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Dashboard JS is now running!");
 
-    const totalSalesBox = document.getElementById("totalSalesBox");
-    const salesAmount = document.getElementById("salesAmount");
-    const monthlySalesBox = document.getElementById("monthlySales");
-    const monthlySalesAmount = document.getElementById("monthlySalesAmount");
-    const topMembersBox = document.getElementById("topTeamMembers");
-    const topMembersList = document.getElementById("topMembers");
-    const topCategoryBox = document.getElementById("topCategorySales");
-    const topCategoryList = document.getElementById("topCategory");
-    const topChannelBox = document.getElementById("topInfluencingChannel");
-    const topChannelList = document.getElementById("topChannel");
-
-    totalSalesBox.addEventListener("click",()=>{
-        fetch('/api/total_sales').then(res => res.json()).then(data=>{
-            salesAmount.textContent = `$${data.total_sales.toLocaleString()}`;
-        });
+    document.getElementById("storeDropDown").addEventListener("change", (e) => {
+        storeChanged(e.target.value);
     });
 
-    monthlySalesBox.addEventListener("click",()=>{
-        fetch('/api/top-clients?year=2025&month=03&store=1').then(res => res.json()).then(data=>{
-            console.log(data)
-            monthlySalesAmount.textContent = `$${data[0].MonthlySales.toLocaleString()}`;
-        });
-    });
+    document.getElementById("yearDropDown").addEventListener("change", (e) => {
+        yearChanged(e.target.value);
+    }); 
 
-    topMembersBox.addEventListener("click",()=>{
-        fetch('/api/top-team-members?year=2025&month=04&store=1').then(res => res.json()).then(data=>{
-            console.log(data);
-            topMembersList.textContent = data[0]['Team member'];
-        });
-    });
+    document.getElementById("monthDropDown").addEventListener("change", (e) => {
+        monthChanged(e.target.value);
+    });     
 
-    topCategoryBox.addEventListener("click",()=>{
-        fetch('/api/sales-by-category?year=2025&month=03&store=1').then(res => res.json()).then(data=>{
-            console.log(data)
-            topCategoryList.textContent = data[0]['Category'];
-        });
-    });
+    changeFiltersAndDashboard(selectedStore, selectedYear, selectedMonth);
 
-    topChannelBox.addEventListener("click",()=>{
-        fetch('/api/sales-by-channel?year=2025&month=03&store=1').then(res => res.json()).then(data=>{
-            console.log(data)
-            topChannelList.textContent = data[0]['Channel'];
-        });
-    });
 });
 
+function changeFiltersAndDashboard(store, year, month){
+    selectedStore = store;
+    selectedYear = year;
+    selectedMonth = month;
+
+    fetch('/api/stores').then(res => res.json()).then(stores =>{
+        populateStoreDropdown(stores, store)
+    });
+
+    fetch(`/api/years?store=${store}`).then(res => res.json()).then(years =>{
+        const yearList = years.map(obj => obj.years);
+        const yearToUse = yearList.includes(year) ? year : yearList[0]
+        selectedYear = yearToUse
+
+        populateYearDropdown(yearList, yearToUse);
+
+        return fetch(`/api/months?store=${store}&year=${yearToUse}`);
+    })
+    .then(res => res.json()).then(months =>{
+        const monthList = months.map(obj => obj.months);
+        const monthToUse = monthList.includes(month) ? month : monthList[0];
+        selectedMonth = monthToUse;
+        
+        populateMonthDropdown(monthList, monthToUse);
+
+        updateDashboard(selectedStore, selectedYear, selectedMonth);
+    });
+
+}
