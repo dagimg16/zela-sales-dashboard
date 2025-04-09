@@ -79,3 +79,28 @@ function populateMonthDropdown(data, defualtMonth) {
             .property("selected", options == defualtMonth)
     })
 }
+function storeChanged(newStore) {
+    selectedStore = newStore;
+    changeFiltersAndDashboard(newStore, selectedYear, selectedMonth);
+}
+function yearChanged(newYear) {
+    selectedYear = newYear;
+    fetch(`/api/months?store=${selectedStore}&year=${newYear}`)
+        .then(res => res.json())
+        .then(months => {
+            const monthList = months.map(obj => obj.months);
+            const monthToUse = monthList[0];
+            selectedMonth = monthToUse;
+            populateMonthDropdown(monthList, monthToUse);
+            updateDashboard(selectedStore, selectedYear, selectedMonth);
+        });
+}
+function monthChanged(newMonth) {
+    selectedMonth = newMonth;
+    updateDashboard(selectedStore, selectedYear, selectedMonth);
+}
+function updateDashboard(selectedStore, selectedYear, selectedMonth) {
+    console.log(`selected store is :${selectedStore}`)
+    console.log(`selected year is :${selectedYear}`)
+    console.log(`selected month is :${selectedMonth}`)
+}
