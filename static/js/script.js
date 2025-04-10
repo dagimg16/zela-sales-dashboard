@@ -103,4 +103,16 @@ function updateDashboard(selectedStore, selectedYear, selectedMonth) {
     console.log(`selected store is :${selectedStore}`)
     console.log(`selected year is :${selectedYear}`)
     console.log(`selected month is :${selectedMonth}`)
+
+    // Example 
+    ploteDailySales(selectedStore, selectedYear, selectedMonth);
+    
+}
+//Example    
+function ploteDailySales(selectedStore, selectedYear, selectedMonth){
+    fetch(`/api/daily-sales?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
+        .then(res => res.json())
+        .then(dailySales => {
+            console.log(dailySales)
+        });
 }
