@@ -44,5 +44,9 @@ body {
 }
 
 .chart {
-    height: 200px;
+    height: 100%;
+}
+#dailySalesChart {
+    width: 100%;
+    height: 100%;
 }

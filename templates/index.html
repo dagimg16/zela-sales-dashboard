@@ -8,7 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 </head>
 
@@ -46,6 +45,14 @@
             <h3>Average Sale Value</h3>
             <p id="averageSales"></p>
         </div>
+        <div id="dailySales" class="kpis-box chart">
+            <h3>Daily Sales</h3>
+            <div id="dailySalesChart"></div>
+        </div>
+        <div id="monthlySales" class="kpis-box chart">
+            <h3>Monthly Sales</h3>
+            <div id="monthlySalesChart"></div>
+        </div>
         <div id="topTeamMembers" class="kpis-box">
             <h3>Top Team Members</h3>
             <p id="topMembers"></p>
@@ -57,14 +64,6 @@
         <div id="topClients" class="kpis-box">
             <h3>Top Clients</h3>
             <p id="topClients"></p>
-        </div>
-        <div id="dailySales" class="kpis-box chart">
-            <h3>Daily Sales</h3>
-            <!-- Line chart will go here -->
-        </div>
-        <div id="monthlySales" class="kpis-box chart">
-            <h3>Monthly Sales</h3>
-            <!-- Line chart will go here -->
         </div>
         <div class="kpis-box chart">
             <h3>Appointment Channels</h3>

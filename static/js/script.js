@@ -1,3 +1,8 @@
+const monthMap = {
+    "01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr",
+    "05": "May", "06": "Jun", "07": "Jul", "08": "Aug",
+    "09": "Sep", "10": "Oct", "11": "Nov", "12": "Dec"
+  };
 
 let selectedStore = 1;
 let selectedYear = 2025;
@@ -75,7 +80,7 @@ function populateMonthDropdown(data, defualtMonth) {
     selector.selectAll("option").remove();
     data.forEach((options) => {
         selector.append("option")
-            .text(options).attr("value", options)
+            .text(monthMap[options]).attr("value", options)
             .property("selected", options == defualtMonth)
     })
 }
@@ -104,14 +109,17 @@ function updateDashboard(selectedStore, selectedYear, selectedMonth) {
     console.log(`selected year is :${selectedYear}`)
     console.log(`selected month is :${selectedMonth}`)
 
-    // Example 
+    //Call KPI Metrics Display Function
     displayKpiMetrics(selectedStore, selectedYear, selectedMonth);
 
      // Line Chart function
-     plotLineChart(selectedStore, selectedYear, selectedMonth);
+    plotLineChart(selectedStore, selectedYear, selectedMonth);
+
+    plotMonthlyChart(selectedStore, selectedYear);
+
     
 }
-//Example    
+//KIP Metrics Display   
 function displayKpiMetrics(selectedStore, selectedYear, selectedMonth){
     fetch(`/api/kpis?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
         .then(res => res.json())
@@ -131,8 +139,9 @@ function displayKpiMetrics(selectedStore, selectedYear, selectedMonth){
             document.getElementById("numberSales").textContent = numberOfSales;
             document.getElementById("averageSales").textContent = averageSales;
             
-        });
-}
+        })
+        .catch(error => console.error('Error fetching KPI data:', error));
+};
 
 function plotLineChart(selectedStore, selectedYear, selectedMonth) {
     fetch(`/api/daily-sales?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
@@ -153,13 +162,43 @@ function plotLineChart(selectedStore, selectedYear, selectedMonth) {
                 line: { shape: 'linear'}
             }];
 
-            // let linechartlayout = {
-            //     title: `Daily Sales for ${selectedMonth}/${selectedYear} at Store${selectedStore}`,
-            //     xaxis: { title: 'Day'},
-            //     yaxis: { title: 'Sales ($)'}
-            // };
+            let linechartlayout = {
+                width: 500,
+                height: 400,
+                // title: `Daily Sales for ${selectedMonth}/${selectedYear} at Store${selectedStore}`,
+                xaxis: { title: 'Day'},
+                yaxis: { title: 'Sales ($)'}
+            };
 
-            Plotly.newPlot("dailySales", linechart);
+            Plotly.newPlot("dailySalesChart", linechart, linechartlayout, { responsive: true });
         })
         .catch(error => console.error('Error fetching daily sales:', error));
 }
+
+function plotMonthlyChart(selectedStore, selectedYear) {
+    fetch(`/api/monthly-sales?store=${selectedStore}&year=${selectedYear}`)
+        .then(res => res.json())
+        .then(monthlySales =>{
+            console.log("fetched monthly sales data successfully");
+            console.log(monthlySales)
+            const month = monthlySales.map(month => monthMap[month.Month]);
+            const sales = monthlySales.map(sales => sales.MonthlySales);
+    
+            let barchart = [{
+                x: month,
+                y: sales,
+                type: "bar"
+            }];
+
+            let barlayout = {
+                width: 500,
+                height: 400,
+                xaxis: { title: 'Month'},
+                yaxis: { title: 'Sales ($)'}
+            };
+
+            Plotly.newPlot("monthlySalesChart", barchart, barlayout, { responsive: true });
+        })
+        .catch(error => console.error('Error fetching monthly data sales:', error));
+
+};
