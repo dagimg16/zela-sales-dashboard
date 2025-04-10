@@ -106,6 +106,9 @@ function updateDashboard(selectedStore, selectedYear, selectedMonth) {
 
     // Example 
     ploteDailySales(selectedStore, selectedYear, selectedMonth);
+
+     // Line Chart function
+     plotLineChart(selectedStore, selectedYear, selectedMonth);
     
 }
 //Example    
@@ -115,4 +118,34 @@ function ploteDailySales(selectedStore, selectedYear, selectedMonth){
         .then(dailySales => {
             console.log(dailySales)
         });
+}
+
+function plotLineChart(selectedStore, selectedYear, selectedMonth) {
+    fetch(`/api/daily-sales?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
+        .then(res => res.json())
+        .then(dailySales => {
+            const days = dailySales.map(sale => sale.Day);
+            const sales = dailySales.map(sale => sale.DailySales);
+
+            console.log("Days:", days);
+            console.log("Sales:", sales);
+
+            let linechart = [{
+                x: days,
+                y: sales,
+                mode: 'lines+markers',
+                type: 'scatter',
+                name: 'Daily Sales',
+                line: { shape: 'linear'}
+            }];
+
+            // let linechartlayout = {
+            //     title: `Daily Sales for ${selectedMonth}/${selectedYear} at Store${selectedStore}`,
+            //     xaxis: { title: 'Day'},
+            //     yaxis: { title: 'Sales ($)'}
+            // };
+
+            Plotly.newPlot("dailySales", linechart);
+        })
+        .catch(error => console.error('Error fetching daily sales:', error));
 }
