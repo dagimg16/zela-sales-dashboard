@@ -1,6 +1,6 @@
 .custom-jumbotron {
     background-color: #f6e1f2;
-}  
+}
 
 /* .form-select {
     background-color: #eccde7;
@@ -17,5 +17,32 @@
     font-size: 1rem;
     text-align: left !important;
     direction: ltr;
-    width: 80px; 
+    width: 80px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+.kpi-box,
+.kpis-box {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 20px;
+    flex: 1 1 300px;
+}
+
+.chart {
+    height: 200px;
 }
