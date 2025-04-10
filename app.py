@@ -67,12 +67,15 @@ def get_kpis():
     branch = request.args.get('store')
 
     query = """
-        SELECT strftime('%m', Date) as Month, SUM("Total sales") as TotalSales
+        SELECT strftime('%m', Date) as Month, 
+        SUM("Total sales") as Total_Sales, 
+        COUNT(DISTINCT ("Sale no.")) as Number_of_Sales,
+        ROUND(SUM("Total sales") * 1.0 / COUNT(DISTINCT "Sale no."), 2) AS Average_Sale_Value
         FROM sales_data 
         WHERE Store = ? 
             AND strftime('%Y', Date) = ? 
             AND strftime('%m', Date) = ? 
-         GROUP BY Month
+        GROUP BY Month
         """
     args = (branch,year, month)
     total_sales = query_db(query,args)

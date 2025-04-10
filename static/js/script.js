@@ -105,18 +105,32 @@ function updateDashboard(selectedStore, selectedYear, selectedMonth) {
     console.log(`selected month is :${selectedMonth}`)
 
     // Example 
-    ploteDailySales(selectedStore, selectedYear, selectedMonth);
+    displayKpiMetrics(selectedStore, selectedYear, selectedMonth);
 
      // Line Chart function
      plotLineChart(selectedStore, selectedYear, selectedMonth);
     
 }
 //Example    
-function ploteDailySales(selectedStore, selectedYear, selectedMonth){
-    fetch(`/api/daily-sales?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
+function displayKpiMetrics(selectedStore, selectedYear, selectedMonth){
+    fetch(`/api/kpis?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
         .then(res => res.json())
-        .then(dailySales => {
-            console.log(dailySales)
+        .then(kpiMetrics => {
+            console.log("fetched KPI data successfully");
+            const totalSales = `$${kpiMetrics[0].Total_Sales.toLocaleString(undefined,{
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2  
+                                })}`;
+            const numberOfSales = kpiMetrics[0].Number_of_Sales.toLocaleString();
+            const averageSales =  `$${kpiMetrics[0].Average_Sale_Value.toLocaleString(undefined,{
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                                })}`;
+
+            document.getElementById("salesAmount").textContent = totalSales;
+            document.getElementById("numberSales").textContent = numberOfSales;
+            document.getElementById("averageSales").textContent = averageSales;
+            
         });
 }
 
