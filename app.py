@@ -28,10 +28,37 @@ def query_db(query, args=(), one=False):
 def index():
     return render_template('index.html')    
 
-#Example how flas integrate with js    
-@app.route('/api/total_sales')
-def get_total_sales():
-    return jsonify({"total_sales": 25123.75})
+@app.route('/api/stores')
+def get_store_number():
+    query = "SELECT DISTINCT Store as store FROM sales_data;"
+    store_number = query_db(query)
+    return jsonify(store_number)
+
+@app.route('/api/years')
+def get_years():
+    branch = request.args.get('store')
+    query = """
+            SELECT DISTINCT strftime('%Y', Date) as years
+            FROM sales_data 
+            WHERE Store = ?
+        """
+    args = (branch,)
+    years= query_db(query, args)
+    return jsonify(years)
+
+@app.route('/api/months')
+def get_months():
+    year = request.args.get('year')
+    branch = request.args.get('store')
+    query = """
+            SELECT DISTINCT strftime('%m', Date) as months
+            FROM sales_data 
+            WHERE Store = ?
+                AND strftime('%Y', Date) = ?
+        """
+    args = (branch, year)
+    months= query_db(query, args)
+    return jsonify(months)
 
 @app.route('/api/kpis')
 def get_kpis():
@@ -113,15 +140,15 @@ def get_top_team_members():
     branch = request.args.get('store')
 
     query = """
-    SELECT "Team member", SUM("Total sales") as MonthlySales
-    FROM sales_data
-    WHERE Store = ?
-        AND strftime('%Y', Date) = ?
-        AND strftime('%m', Date) = ?
-    GROUP BY "Team member"
-    ORDER BY MonthlySales DESC
-    LIMIT 5
-    """
+        SELECT "Team member", SUM("Total sales") as MonthlySales
+        FROM sales_data
+        WHERE Store = ?
+            AND strftime('%Y', Date) = ?
+            AND strftime('%m', Date) = ?
+        GROUP BY "Team member"
+        ORDER BY MonthlySales DESC
+        LIMIT 5
+        """
     args= (branch,year, month)
     top_members = query_db(query, args)
     return  jsonify(top_members)      
@@ -133,15 +160,15 @@ def get_sales_by_category():
     branch = request.args.get('store')
 
     query = """
-    SELECT Category, SUM("Total sales") as MonthlySales
-    FROM sales_data
-    WHERE Store = ?
-        AND strftime('%Y', Date) = ?
-        AND strftime('%m', Date) = ?
-    GROUP BY Category
-    ORDER BY MonthlySales DESC
-    LIMIT 5
-    """
+        SELECT Category, SUM("Total sales") as MonthlySales
+        FROM sales_data
+        WHERE Store = ?
+            AND strftime('%Y', Date) = ?
+            AND strftime('%m', Date) = ?
+        GROUP BY Category
+        ORDER BY MonthlySales DESC
+        LIMIT 5
+        """
     args= (branch,year, month)
     category_sales = query_db(query, args)
     return  jsonify(category_sales)           
@@ -154,15 +181,14 @@ def get_sales_by_channel():
     branch = request.args.get('store')
 
     query = """
-    SELECT Channel, COUNT(DISTINCT ("Sale no.")) as "Customer Count"
-    FROM sales_data
-    WHERE Store = ?
-        AND strftime('%Y', Date) = ?
-        AND strftime('%m', Date) = ?
-    GROUP BY Channel
-    ORDER BY "Customer Count" DESC
-    """
-  
+        SELECT Channel, COUNT(DISTINCT ("Sale no.")) as "Customer Count"
+        FROM sales_data
+        WHERE Store = ?
+            AND strftime('%Y', Date) = ?
+            AND strftime('%m', Date) = ?
+        GROUP BY Channel
+        ORDER BY "Customer Count" DESC
+        """
     args= (branch,year, month)
     channel_sales = query_db(query, args)
     return  jsonify(channel_sales)                  
