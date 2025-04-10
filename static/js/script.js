@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch('/api/top-clients?year=2025&month=03&store=1').then(res => res.json()).then(data=>{
             console.log(data)
             monthlySalesAmount.textContent = `$${data[0].MonthlySales.toLocaleString()}`;
+
         });
     });
 
@@ -48,3 +49,28 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+function lineChart(days, dailySales){
+    const ctx = document.getElementById('dailyChart').getContext('2d');
+    const salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: days,
+            datasets: [{
+                label: 'Daily Sales',
+                data: dailySales,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
