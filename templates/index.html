@@ -9,6 +9,9 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
 </head>
 
 <body>
@@ -64,17 +67,13 @@
             </div>
             <div id="topMembers"></div>
           </div>          
-        <div id="topCategorySales" class="kpis-box chart">
-            <h3>Top Selling Services</h3>
-            <p id="topCategory"></p>
-        </div>
         <div id="topClients" class="kpis-box">
             <h3>Top Clients</h3>
             <div id="clientsBox"> </div>
         </div>
         <div class="kpis-box chart">
-            <h3>Appointment Channels</h3>
-            <!-- Pie chart will go here -->
+            <h3>Appointments By Channels</h3>
+            <canvas id="channelDoughnutChart"></canvas>
         </div>
         <div class="kpis-box chart">
             <h3>Sales by Category</h3>
@@ -84,7 +83,7 @@
     <div id="modal" style="display:none;" class="modal-overlay">
         <div class="modal-content" id="modalContent"></div>
     </div>
-    
+
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="/static/js/script.js"></script>

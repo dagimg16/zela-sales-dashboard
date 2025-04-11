@@ -123,6 +123,7 @@ font-weight: bold;
     text-align: right;
 }
 
+<<<<<<< HEAD
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -148,3 +149,9 @@ font-weight: bold;
     overflow-y: auto;
 
 }
+=======
+#channelDoughnutChart {
+    max-width: 100%;
+    height: auto;
+}
+>>>>>>> e57dcdca5e6f6017a9d129fc56ce52d1e93a0a60
