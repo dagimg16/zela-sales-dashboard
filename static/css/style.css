@@ -65,3 +65,16 @@ body {
 .member-sales {
 font-weight: bold;
 }
+
+.client-table {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+ }
+.client-name {
+    font-weight: 500;
+}
+.client-sales {
+font-weight: bold;
+}

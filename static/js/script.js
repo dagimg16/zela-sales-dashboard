@@ -119,6 +119,9 @@ function updateDashboard(selectedStore, selectedYear, selectedMonth) {
 
     displayTopTeamMembers(selectedStore, selectedYear, selectedMonth);
 
+    // Top Clients Table function
+    topClientsData(selectedStore, selectedYear, selectedMonth);
+
     
 }
 //KIP Metrics Display   
@@ -222,4 +225,27 @@ function displayTopTeamMembers(selectedStore, selectedYear, selectedMonth) {
 
         })
         .catch(error => console.error('Error fetching team members data sales:', error));
+}
+
+function topClientsData(selectedStore, selectedYear, selectedMonth){
+    fetch(`/api/top-clients?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
+        .then(res => res.json())
+        .then(topClients => {
+            console.log("Fetched top clients data successfully");
+            console.log(topClients);
+
+            const topClientsBox = document.getElementById("clientsBox");
+            topClientsBox.innerHTML = "";
+
+            topClients.forEach(client => {
+                const row = document.createElement("div");
+                row.classList.add('client-table');
+                row.innerHTML =`
+                    <span class="client-name">${client.Client}</span>
+                    <span class="client-sales">$${client.MonthlySales.toLocaleString()}</span>`;
+
+                topClientsBox.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching top clients data:', error));
 }
