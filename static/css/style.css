@@ -112,3 +112,8 @@ font-weight: bold;
 .member-services {
     text-align: right;
 }
+
+#channelDoughnutChart {
+    max-width: 100%;
+    height: auto;
+}

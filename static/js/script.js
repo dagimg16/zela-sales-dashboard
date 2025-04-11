@@ -134,6 +134,9 @@ function updateDashboard(selectedStore, selectedYear, selectedMonth, sortby) {
 
     plotSalesbyCategory(selectedStore, selectedYear, selectedMonth);
 
+    // Top Influencing Channel
+    displayDoughnutChart(selectedStore, selectedYear, selectedMonth);
+
     
 }
 //KIP Metrics Display   
@@ -299,4 +302,68 @@ function plotSalesbyCategory(selectedStore, selectedYear, selectedMonth){
      })
      .catch(error => console.error('Error fetching sales-by-category data:', error));
 ;
+}
+
+async function displayDoughnutChart(selectedStore, selectedYear, selectedMonth) {
+    try{
+        const response = await fetch(`/api/sales-by-channel?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
+
+        if(!response.ok){
+            throw new Error('network response was not ok: ${response.statusText}');
+        }
+        const topChannels = await response.json();
+
+        console.log("Fetched top channels data successfully");
+        console.log(topChannels);
+
+        const labels = topChannels.map(data => data.Channel);
+        const customer_count = topChannels.map(data => data['Customer Count']);
+        const totalCustomers = customer_count.reduce((acc, count) => acc + count, 0);
+
+        const ctx = document.getElementById('channelDoughnutChart').getContext('2d');
+
+        let doughnutChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Sales by Channel',
+                    data: customer_count,
+                    backgroundColor: [
+                        'rgba(135, 206, 250, 0.6)',
+                        'rgba(135, 206, 235, 0.6)',
+                        'rgba(30, 144, 255, 0.6)',
+                        'rgba(100, 149, 237, 0.6)',
+                        'rgba(0, 0, 205, 0.6)',
+                        'rgba(0, 0, 139, 0.6)'   
+                    ],
+                    borderColor: 'rgba(21, 20, 20, 0.42)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        // text: 'Channels Influence in Sales'
+                    },
+                    datalabels: {
+                        formatter: (value, context) => {
+                            const total = context.chart.data.datasets[0].data.reduce((acc, val) => acc + val, 0);
+                            const percentage = ((value / total) * 100).toFixed(2) + '%';
+                            return percentage;
+                        },
+                        color: '#fff',
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+    }catch (error){
+        console.error('Error fetching channel data:', error);
+    }
 }
