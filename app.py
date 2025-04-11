@@ -143,7 +143,7 @@ def get_top_team_members():
     branch = request.args.get('store')
 
     query = """
-        SELECT "Team member", SUM("Total sales") as MonthlySales
+        SELECT "Team member" as name, SUM("Total sales") as MonthlySales,  COUNT(DISTINCT ("Sale no.")) as "NumberOfSales"
         FROM sales_data
         WHERE Store = ?
             AND strftime('%Y', Date) = ?

@@ -117,6 +117,8 @@ function updateDashboard(selectedStore, selectedYear, selectedMonth) {
 
     plotMonthlyChart(selectedStore, selectedYear);
 
+    displayTopTeamMembers(selectedStore, selectedYear, selectedMonth);
+
     
 }
 //KIP Metrics Display   
@@ -150,9 +152,6 @@ function plotLineChart(selectedStore, selectedYear, selectedMonth) {
             const days = dailySales.map(sale => sale.Day);
             const sales = dailySales.map(sale => sale.DailySales);
 
-            console.log("Days:", days);
-            console.log("Sales:", sales);
-
             let linechart = [{
                 x: days,
                 y: sales,
@@ -180,7 +179,6 @@ function plotMonthlyChart(selectedStore, selectedYear) {
         .then(res => res.json())
         .then(monthlySales =>{
             console.log("fetched monthly sales data successfully");
-            console.log(monthlySales)
             const month = monthlySales.map(month => monthMap[month.Month]);
             const sales = monthlySales.map(sales => sales.MonthlySales);
     
@@ -202,3 +200,26 @@ function plotMonthlyChart(selectedStore, selectedYear) {
         .catch(error => console.error('Error fetching monthly data sales:', error));
 
 };
+
+function displayTopTeamMembers(selectedStore, selectedYear, selectedMonth) {
+    fetch(`/api/top-team-members?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
+        .then(res => res.json())
+        .then(members => {
+            console.log("fetched team members data successfully");
+            console.log(members)
+
+            const topMembersBox = document.getElementById("topMembers");
+            topMembersBox.innerHTML = "";
+
+            members.forEach(member => {
+                const row = document.createElement("div");
+                row.classList.add('team-member');
+                row.innerHTML =`
+                    <span class="member-name">${member.name}</span>
+                    <span clss="member-sales">$${member.MonthlySales.toLocaleString()}</span>`;
+                topMembersBox.appendChild(row);    
+            });
+
+        })
+        .catch(error => console.error('Error fetching team members data sales:', error));
+}
