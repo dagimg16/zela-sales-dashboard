@@ -344,6 +344,7 @@ function plotSalesbyCategory(selectedStore, selectedYear, selectedMonth){
 ;
 }
 
+let doughnutChart;
 async function displayDoughnutChart(selectedStore, selectedYear, selectedMonth) {
     try{
         const response = await fetch(`/api/sales-by-channel?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
@@ -362,7 +363,10 @@ async function displayDoughnutChart(selectedStore, selectedYear, selectedMonth) 
 
         const ctx = document.getElementById('channelDoughnutChart').getContext('2d');
 
-        let doughnutChart = new Chart(ctx, {
+        if (doughnutChart) {
+            doughnutChart.destroy();
+        }
+        doughnutChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: labels,
