@@ -2,14 +2,6 @@
     background-color: #f6e1f2;
 }
 
-/* .form-select {
-    background-color: #eccde7;
-    border-radius: 1rem;
-    padding: .2rem 2.2rem;
-    font-size: 1rem;
-    text-align: left !important;
-  } */
-
 .form-select {
     background-color: #eccde7;
     border-radius: 2rem;
@@ -56,13 +48,6 @@ body {
     height: 100%;
 }
 
-.team-member {
-    display: flex;
-    justify-content: space-between;
-    padding: 6px 0;
-    border-bottom: 1px solid #eee;
- }
-  
 .member-name {
     font-weight: 500;
 }
@@ -104,18 +89,17 @@ font-weight: bold;
 .visit-Date,
 .visit-teamMember,
 .visit-Service,
-.visit-Sales{
+.visit-Sales {
     width: 25%;
     text-align: left;
 }
 
-
 .member-name,
 .member-sales,
 .member-services {
-    width: 33.3%; /* Even spacing */
+    width: 33.3%; /*Even spacing */
     text-align: left;
-}
+} 
 
 .visit-Sales,
 .member-sales,
@@ -123,18 +107,17 @@ font-weight: bold;
     text-align: right;
 }
 
-<<<<<<< HEAD
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
 }
 
 .modal-content {
@@ -147,11 +130,9 @@ font-weight: bold;
     max-width: 800px;
     max-height: 80%;
     overflow-y: auto;
-
 }
-=======
+
 #channelDoughnutChart {
     max-width: 100%;
     height: auto;
-}
->>>>>>> e57dcdca5e6f6017a9d129fc56ce52d1e93a0a60
+} 
