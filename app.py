@@ -141,17 +141,18 @@ def get_top_team_members():
     year = request.args.get('year')
     month = request.args.get('month')
     branch = request.args.get('store')
-
-    query = """
-        SELECT "Team member" as name, SUM("Total sales") as MonthlySales,  COUNT(DISTINCT ("Sale no.")) as "NumberOfSales"
-        FROM sales_data
-        WHERE Store = ?
-            AND strftime('%Y', Date) = ?
-            AND strftime('%m', Date) = ?
-        GROUP BY "Team member"
-        ORDER BY MonthlySales DESC
-        LIMIT 5
-        """
+    sort_column = request.args.get('sort')
+   
+    query = f"""
+    SELECT "Team member" as name, SUM("Total sales") as Sales, COUNT(DISTINCT ("Sale no.")) as Services
+    FROM sales_data 
+    WHERE Store = ? 
+        AND strftime('%Y', Date) = ? 
+        AND strftime('%m', Date) = ? 
+    GROUP BY "Team member"
+    ORDER BY {sort_column} DESC
+    LIMIT 5
+    """
     args= (branch,year, month)
     top_members = query_db(query, args)
     return  jsonify(top_members)      
@@ -170,7 +171,7 @@ def get_sales_by_category():
             AND strftime('%m', Date) = ?
         GROUP BY Category
         ORDER BY MonthlySales DESC
-        LIMIT 5
+        LIMIT 10
         """
     args= (branch,year, month)
     category_sales = query_db(query, args)

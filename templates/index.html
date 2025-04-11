@@ -53,10 +53,17 @@
             <h3>Monthly Sales</h3>
             <div id="monthlySalesChart"></div>
         </div>
-        <div id="topTeamMembers" class="kpis-box">
-            <h3>Top Team Members</h3>
+        <div class="kpis-box">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h3>Team Members</h3>
+              <h6 class="card-title mb-2 text-muted">Sort By</h6>
+              <select id="sortTeamBy" class="sort-dropdown">
+                <option value="sales">Sales</option>
+                <option value="services">Services</option>
+              </select>
+            </div>
             <div id="topMembers"></div>
-        </div>
+          </div>          
         <div id="topCategorySales" class="kpis-box chart">
             <h3>Top Selling Services</h3>
             <p id="topCategory"></p>
@@ -71,7 +78,7 @@
         </div>
         <div class="kpis-box chart">
             <h3>Sales by Category</h3>
-            <!-- Bar chart will go here -->
+            <div id="CategorySalesChart"> </div>
         </div>
     </div>
 

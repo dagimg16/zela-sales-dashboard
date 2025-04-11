@@ -7,6 +7,7 @@ const monthMap = {
 let selectedStore = 1;
 let selectedYear = 2025;
 let selectedMonth = "04";
+let sortby = "Sales"
 
 // Wait until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
@@ -24,7 +25,10 @@ document.addEventListener("DOMContentLoaded", () => {
         monthChanged(e.target.value);
     });
 
-    changeFiltersAndDashboard(selectedStore, selectedYear, selectedMonth);
+    document.getElementById("sortTeamBy").addEventListener("change", (e) => {
+        sortbyChanged(e.target.value);
+    });
+    changeFiltersAndDashboard(selectedStore, selectedYear, selectedMonth, sortby);
 
 });
 
@@ -53,7 +57,7 @@ function changeFiltersAndDashboard(store, year, month) {
 
             populateMonthDropdown(monthList, monthToUse);
 
-            updateDashboard(selectedStore, selectedYear, selectedMonth);
+            updateDashboard(selectedStore, selectedYear, selectedMonth, sortby);
         });
 
 }
@@ -97,14 +101,20 @@ function yearChanged(newYear) {
             const monthToUse = monthList[0];
             selectedMonth = monthToUse;
             populateMonthDropdown(monthList, monthToUse);
-            updateDashboard(selectedStore, selectedYear, selectedMonth);
+            updateDashboard(selectedStore, selectedYear, selectedMonth, sortby);
         });
 }
 function monthChanged(newMonth) {
     selectedMonth = newMonth;
-    updateDashboard(selectedStore, selectedYear, selectedMonth);
+    updateDashboard(selectedStore, selectedYear, selectedMonth, sortby);
 }
-function updateDashboard(selectedStore, selectedYear, selectedMonth) {
+function sortbyChanged(newSortby){
+    sortby = newSortby
+    updateDashboard(selectedStore, selectedYear, selectedMonth, sortby)
+}
+
+
+function updateDashboard(selectedStore, selectedYear, selectedMonth, sortby) {
     console.log(`selected store is :${selectedStore}`)
     console.log(`selected year is :${selectedYear}`)
     console.log(`selected month is :${selectedMonth}`)
@@ -117,10 +127,12 @@ function updateDashboard(selectedStore, selectedYear, selectedMonth) {
 
     plotMonthlyChart(selectedStore, selectedYear);
 
-    displayTopTeamMembers(selectedStore, selectedYear, selectedMonth);
+    displayTopTeamMembers(selectedStore, selectedYear, selectedMonth, sortby);
 
     // Top Clients Table function
     topClientsData(selectedStore, selectedYear, selectedMonth);
+
+    plotSalesbyCategory(selectedStore, selectedYear, selectedMonth);
 
     
 }
@@ -204,22 +216,31 @@ function plotMonthlyChart(selectedStore, selectedYear) {
 
 };
 
-function displayTopTeamMembers(selectedStore, selectedYear, selectedMonth) {
-    fetch(`/api/top-team-members?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
+function displayTopTeamMembers(selectedStore, selectedYear, selectedMonth, sortby) {
+    fetch(`/api/top-team-members?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}&sort=${sortby}`)
         .then(res => res.json())
         .then(members => {
             console.log("fetched team members data successfully");
-            console.log(members)
 
             const topMembersBox = document.getElementById("topMembers");
             topMembersBox.innerHTML = "";
+
+            const header = document.createElement("div");
+            header.classList.add("team-member", "team-header");
+            header.innerHTML = `
+                <span class="member-name"><strong>Name</strong></span>
+                <span class="member-sales"><strong>Sales</strong></span>
+                <span class="member-services"><strong>Services</strong></span>
+                `;
+            topMembersBox.appendChild(header);
 
             members.forEach(member => {
                 const row = document.createElement("div");
                 row.classList.add('team-member');
                 row.innerHTML =`
                     <span class="member-name">${member.name}</span>
-                    <span clss="member-sales">$${member.MonthlySales.toLocaleString()}</span>`;
+                    <span clss="member-sales">$${member.Sales.toLocaleString()}</span>
+                    <span clss="member-services">${member.Services.toLocaleString()}</span>`;
                 topMembersBox.appendChild(row);    
             });
 
@@ -232,7 +253,6 @@ function topClientsData(selectedStore, selectedYear, selectedMonth){
         .then(res => res.json())
         .then(topClients => {
             console.log("Fetched top clients data successfully");
-            console.log(topClients);
 
             const topClientsBox = document.getElementById("clientsBox");
             topClientsBox.innerHTML = "";
@@ -248,4 +268,35 @@ function topClientsData(selectedStore, selectedYear, selectedMonth){
             });
         })
         .catch(error => console.error('Error fetching top clients data:', error));
+}
+
+function plotSalesbyCategory(selectedStore, selectedYear, selectedMonth){
+     fetch(`/api/sales-by-category?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
+     .then(res => res.json())
+     .then(categorySales=> {
+        console.log("fetched sales-by-category data successfully");
+        console.log(categorySales)
+        const category = categorySales.map(cat => cat.Category).reverse();
+        const sales = categorySales.map(sal => sal.MonthlySales).reverse();
+
+        let barData = [{
+            x: sales,
+            y: category,
+            type : "bar",
+            orientation: "h"
+          }]
+      
+          let barlayout = {
+            width: 500,
+            height: 400
+          };
+      
+          
+          Plotly.newPlot("CategorySalesChart", barData, barlayout)
+
+
+
+     })
+     .catch(error => console.error('Error fetching sales-by-category data:', error));
+;
 }

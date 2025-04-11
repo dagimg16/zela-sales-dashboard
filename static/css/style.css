@@ -19,7 +19,12 @@
     direction: ltr;
     width: 80px;
 }
-
+.sort-dropdown {
+    border-radius: 2rem;
+    font-size: 1rem;
+    text-align: left !important;
+    width:90px
+}
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -77,4 +82,33 @@ font-weight: bold;
 }
 .client-sales {
 font-weight: bold;
+}
+#topMembers {
+    margin-top: 10px;
+}
+
+.team-member {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.team-header {
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 5px;
+}
+
+.member-name,
+.member-sales,
+.member-services {
+    width: 20.3%; /* Even spacing */
+    text-align: left;
+}
+
+.member-sales,
+.member-services {
+    text-align: right;
 }
