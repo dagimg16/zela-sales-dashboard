@@ -177,6 +177,21 @@ def get_sales_by_category():
     category_sales = query_db(query, args)
     return  jsonify(category_sales)           
 
+@app.route('/api/client-history')
+def client_history():
+    client = request.args.get('client')
+
+    query = """
+    SELECT strftime('%Y-%m-%d', Date) as Date, "Team member" as teamMember, Category as Service, SUM("Total sales") as sales
+    FROM sales_data
+    WHERE Client = ?
+    GROUP BY teamMember
+    ORDER BY Date DESC
+    LIMIT 10
+    """
+    args= (client,)
+    clientHistory = query_db(query, args)
+    return jsonify(clientHistory)
  
 @app.route('/api/sales-by-channel')
 def get_sales_by_channel():

@@ -28,6 +28,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("sortTeamBy").addEventListener("change", (e) => {
         sortbyChanged(e.target.value);
     });
+
+    document.getElementById("modal").addEventListener("click", (e) => {
+        if (e.target.id === "modal") {
+          document.getElementById("modal").style.display = "none";
+        }
+      });
+
     changeFiltersAndDashboard(selectedStore, selectedYear, selectedMonth, sortby);
 
 });
@@ -264,11 +271,44 @@ function topClientsData(selectedStore, selectedYear, selectedMonth){
                     <span class="client-name">${client.Client}</span>
                     <span class="client-sales">$${client.MonthlySales.toLocaleString()}</span>`;
 
+                row.addEventListener("click", () => {
+                    showClientHistory(client.Client); // pass name to the function
+                    });
                 topClientsBox.appendChild(row);
             });
         })
         .catch(error => console.error('Error fetching top clients data:', error));
 }
+function showClientHistory(clientName){
+    fetch(`/api/client-history?client=${encodeURIComponent(clientName)}`)
+        .then(res => res.json())
+        .then(visits => {
+        if (visits.length === 0) {
+            showModal(`${clientName} has no visit history.`);
+            return;
+        }
+
+        let content = `<h4 style="text-align: center;">Visit History for ${clientName}</h4><ul>`;
+        visits.forEach(visit=>{
+            content += `
+                    <li style="display: flex; justify-content: space-between;">
+                        <span class="visit-Date">${visit.Date}</span>
+                        <span class="visit-teamMember">${visit.teamMember}</span>
+                        <span class="visit-Service">${visit.Service}</span>
+                        <span class="visit-Sales">$${visit.sales.toFixed(2)}</span>
+                    </li>`;
+        });
+        content += '</ul';
+
+        showModal(content);
+
+    });  
+
+}
+function showModal(html) {
+    document.getElementById("modalContent").innerHTML = html;
+    document.getElementById("modal").style.display = "block";
+  }
 
 function plotSalesbyCategory(selectedStore, selectedYear, selectedMonth){
      fetch(`/api/sales-by-category?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
