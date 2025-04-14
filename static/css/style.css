@@ -59,7 +59,7 @@ body {
   
   .kpi-highlight h3 {
     font-size: 1.75rem;
-    color: #c2185b;
+    /* color: #c2185b; */
     margin-bottom: 12px;
   }
   
@@ -201,4 +201,21 @@ body {
 .member-sales,
 .member-services {
     text-align: right;
+}
+.kpi-change {
+    font-size: 15px !important;
+    margin-top: 4px;
+    font-weight: 500;
+}
+  
+.kpi-change.up {
+    color: green;
+}
+
+.kpi-change.down {
+    color: red;
+}
+
+.kpi-change.none {
+    color: #888;
 }

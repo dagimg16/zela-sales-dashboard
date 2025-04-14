@@ -68,9 +68,9 @@ def get_kpis():
 
     query = """
         SELECT strftime('%m', Date) as Month, 
-        SUM("Total sales") as Total_Sales, 
-        COUNT(DISTINCT ("Sale no.")) as Number_of_Sales,
-        ROUND(SUM("Total sales") * 1.0 / COUNT(DISTINCT "Sale no."), 2) AS Average_Sale_Value
+        SUM("Total sales") as totalSales, 
+        COUNT(DISTINCT ("Sale no.")) as numSales,
+        ROUND(SUM("Total sales") * 1.0 / COUNT(DISTINCT "Sale no."), 2) AS avgSales
         FROM sales_data 
         WHERE Store = ? 
             AND strftime('%Y', Date) = ? 
@@ -78,9 +78,28 @@ def get_kpis():
         GROUP BY Month
         """
     args = (branch,year, month)
-    total_sales = query_db(query,args)
+    current_data = query_db(query, args, one=True)
 
-    return jsonify(total_sales)
+    prev_year = str(int(year) - 1)
+    args_prev = (branch, prev_year, month)
+    prev_data = query_db(query, args_prev, one=True)
+
+    if not prev_data:
+        prev_data = {'totalSales': 0, 'numSales': 0, 'avgSales': 0}
+
+    def percent_change(current, previous):
+            return round(((current - previous) / previous) * 100, 2) if previous != 0 else None
+    
+    response = {
+        "current": current_data,
+        "change": {
+            "totalSales": percent_change(current_data['totalSales'], prev_data['totalSales']),
+            "numSales": percent_change(current_data['numSales'], prev_data['numSales']),
+            "salesPerCustomer": percent_change(current_data['avgSales'], prev_data['avgSales'])
+        }
+    }
+    
+    return jsonify(response)
 
 @app.route('/api/daily-sales')
 def get_daily_sales():

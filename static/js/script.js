@@ -152,15 +152,18 @@ function displayKpiMetrics(selectedStore, selectedYear, selectedMonth){
         .then(res => res.json())
         .then(kpiMetrics => {
             console.log("fetched KPI data successfully");
-            const totalSales = `$${kpiMetrics[0].Total_Sales.toLocaleString(undefined,{
+            console.log(kpiMetrics)
+            const totalSales = `$${kpiMetrics.current.totalSales.toLocaleString(undefined,{
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2  
                                 })}`;
-            const numberOfSales = kpiMetrics[0].Number_of_Sales.toLocaleString();
-            const averageSales =  `$${kpiMetrics[0].Average_Sale_Value.toLocaleString(undefined,{
+            const numberOfSales = kpiMetrics.current.numSales.toLocaleString();
+            const averageSales =  `$${kpiMetrics.current.avgSales.toLocaleString(undefined,{
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2
                                 })}`;
+            const kpichanges = kpiMetrics.change;
+            updateKpichanges(kpichanges);
 
             document.getElementById("salesAmount").textContent = totalSales;
             document.getElementById("numberSales").textContent = numberOfSales;
@@ -170,6 +173,27 @@ function displayKpiMetrics(selectedStore, selectedYear, selectedMonth){
         .catch(error => console.error('Error fetching KPI data:', error));
 };
 
+function updateKpichanges(changes){
+    const salesChange = document.getElementById("salesChange");
+    const numSalesChange = document.getElementById("numSalesChange");
+    const avgSalesChange = document.getElementById("avgSalesChange");
+
+    function updateChangeElement(element, percentChange) {
+        if (percentChange === null || isNaN(percentChange)) {
+          element.innerText = "No data from last year";
+          element.className = "kpi-change none";
+        } else {
+          const arrow = percentChange >= 0 ? "↑" : "↓";
+          const className = percentChange >= 0 ? "kpi-change up" : "kpi-change down";
+          element.innerText = `${arrow} ${Math.abs(percentChange).toFixed(1)}% from last year`;
+          element.className = className;
+        }
+      }
+
+    updateChangeElement(salesChange, changes.totalSales);
+    updateChangeElement(numSalesChange, changes.numSales);
+    updateChangeElement(avgSalesChange, changes.salesPerCustomer);
+}
 function plotLineChart(selectedStore, selectedYear, selectedMonth) {
     fetch(`/api/daily-sales?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
         .then(res => res.json())
