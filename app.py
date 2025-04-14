@@ -98,7 +98,7 @@ def get_kpis():
             "salesPerCustomer": percent_change(current_data['avgSales'], prev_data['avgSales'])
         }
     }
-    
+
     return jsonify(response)
 
 @app.route('/api/daily-sales')
@@ -149,7 +149,7 @@ def get_top_clients():
             AND strftime('%m', Date) = ? 
         GROUP BY Client
         ORDER BY MonthlySales DESC
-        LIMIT 5 
+        LIMIT 10
         """
     args = (branch,year, month)
     top_clients = query_db(query,args)
@@ -170,7 +170,7 @@ def get_top_team_members():
         AND strftime('%m', Date) = ? 
     GROUP BY "Team member"
     ORDER BY {sort_column} DESC
-    LIMIT 5
+    LIMIT 10
     """
     args= (branch,year, month)
     top_members = query_db(query, args)

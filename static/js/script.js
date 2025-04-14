@@ -8,6 +8,7 @@ let selectedStore = 1;
 let selectedYear = 2025;
 let selectedMonth = "04";
 let sortby = "Sales"
+let monthlySalesChartInstance = null;
 
 // Wait until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
@@ -207,17 +208,38 @@ function plotLineChart(selectedStore, selectedYear, selectedMonth) {
                 mode: 'lines+markers',
                 type: 'scatter',
                 name: 'Daily Sales',
-                line: { shape: 'linear'}
+                line: { shape: 'spline',width: 3},
+                marker: {size: 6, color: '#636EFA'},
+                hovertemplate: 'Day: %{x}<br>Sales: $%{y}<extra></extra>'
             }];
-
+            
             let linechartlayout = {
+                title: {text: 'Daily Sales Trend ($)',
+                        font: {size: 20, color: '#333'},
+                        x: 0.05},
                 width: 500,
                 height: 400,
-                // title: `Daily Sales for ${selectedMonth}/${selectedYear} at Store${selectedStore}`,
-                xaxis: { title: 'Day'},
-                yaxis: { title: 'Sales ($)'}
+                margin: { t: 60, b: 50, l: 60, r: 30 },
+                xaxis: {
+                    title: 'Day',
+                    titlefont: { size: 14 },
+                    tickfont: { size: 12 },
+                    gridcolor: '#eee',
+                    zeroline: false
+                },
+                yaxis: {
+                    titlefont: { size: 14 },
+                    tickfont: { size: 12 },
+                    gridcolor: '#eee',
+                    zeroline: false
+                },
+                plot_bgcolor: '#fff',
+                paper_bgcolor: '#fff',
+                font: {family: 'Arial, sans-serif',
+                        color: '#333'
+                }
             };
-
+            
             Plotly.newPlot("dailySalesChart", linechart, linechartlayout, { responsive: true });
         })
         .catch(error => console.error('Error fetching daily sales:', error));
@@ -228,23 +250,91 @@ function plotMonthlyChart(selectedStore, selectedYear) {
         .then(res => res.json())
         .then(monthlySales =>{
             console.log("fetched monthly sales data successfully");
-            const month = monthlySales.map(month => monthMap[month.Month]);
-            const sales = monthlySales.map(sales => sales.MonthlySales);
+            const labels = monthlySales.map(month => monthMap[month.Month]);
+            const data = monthlySales.map(sales => sales.MonthlySales);
     
-            let barchart = [{
-                x: month,
-                y: sales,
-                type: "bar"
-            }];
-
-            let barlayout = {
-                width: 500,
-                height: 400,
-                xaxis: { title: 'Month'},
-                yaxis: { title: 'Sales ($)'}
+            const config = {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Monthly Sales ($)',
+                        data: data,
+                        backgroundColor: 'rgba(99, 132, 255, 0.7)',
+                        borderRadius: 6,  
+                        barThickness: 28, 
+                        maxBarThickness: 30
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: { top: 20, right: 20, left: 20, bottom: 20 }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Monthly Sales Trend ($)',
+                            align:'start',
+                            font: { size: 20,
+                                    weight: 'normal',
+                                    family: 'Arial, sans-serif'
+                             },
+                            color: '#333',
+                            padding: {bottom: 20 }
+                        },
+                        tooltip: {
+                            backgroundColor: '#333',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 12 },
+                            callbacks: {
+                                label: ctx => `Sales: $${ctx.raw.toLocaleString()}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month',
+                                font: { size: 14 },
+                                color: '#555'
+                            },
+                            ticks: {
+                                font: { size: 12 },
+                                color: '#333'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: false 
+                            },
+                            ticks: {
+                                font: { size: 12 },
+                                color: '#333',
+                                callback: value => `$${value.toLocaleString()}`
+                            },
+                            grid: {
+                                color: '#eee',
+                                borderDash: [4, 4]
+                            }
+                        }
+                    }
+                }
             };
 
-            Plotly.newPlot("monthlySalesChart", barchart, barlayout, { responsive: true });
+            if (monthlySalesChartInstance) {
+                monthlySalesChartInstance.destroy();
+            }
+
+            const barchart = document.getElementById('monthlySalesChart').getContext('2d');
+            monthlySalesChartInstance = new Chart(barchart, config);
         })
         .catch(error => console.error('Error fetching monthly data sales:', error));
 
@@ -289,8 +379,15 @@ function topClientsData(selectedStore, selectedYear, selectedMonth){
             console.log("Fetched top clients data successfully");
 
             const topClientsBox = document.getElementById("clientsBox");
-            topClientsBox.innerHTML = "";
-
+            topClientsBox.innerHTML ="";
+            const header = document.createElement("div");
+            header.classList.add("client-table", "client-header");
+            header.innerHTML = `
+                <span class="client-name"><strong>Name</strong></span>
+                <span class="client-sales"><strong>Sales</strong></span>
+                `;
+            topClientsBox.appendChild(header);
+                
             topClients.forEach(client => {
                 const row = document.createElement("div");
                 row.classList.add('client-table');
