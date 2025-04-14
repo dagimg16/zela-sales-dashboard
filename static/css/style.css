@@ -1,90 +1,188 @@
-.custom-jumbotron {
-    background-color: #f6e1f2;
-}
-
-.form-select {
-    background-color: #eccde7;
-    border-radius: 2rem;
-    padding: 0.1rem 0.75rem;
-    font-size: 1rem;
-    text-align: left !important;
-    direction: ltr;
-    width: 80px;
-}
-.sort-dropdown {
-    border-radius: 2rem;
-    font-size: 1rem;
-    text-align: left !important;
-    width:90px
-}
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
-}
-
-.container {
+  }
+  
+  .custom-jumbotron {
+    background-color: #f6e1f2;
+    text-align: center;
+  }
+  
+  .form-select,
+  .sort-dropdown {
+    background-color: #eccde7;
+    border-radius: 2rem;
+    font-size: 1rem;
+    padding: 0.1rem 0.75rem;
+    width: 80px;
+  }
+  
+  .sort-dropdown {
+    width: 90px;
+  }
+  
+  .container {
     display: flex;
     flex-wrap: wrap;
     padding: 20px;
-}
-
-.kpi-box,
-.kpis-box {
+    justify-content: center;
+  }
+  
+  .kpi-box,
+  .kpis-box {
     background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     margin: 10px;
     padding: 20px;
     flex: 1 1 300px;
-}
-
-.chart {
+  }
+  
+  /* KPI Highlight Boxes */
+  .kpi-highlight {
+    background: linear-gradient(135deg, #ffe6f0, #fddde6);
+    border: 2px solid #f2b6cc;
+    text-align: center;
+    padding: 30px;
+    box-shadow: 0 4px 10px rgba(255, 153, 204, 0.25);
+    border-radius: 16px;
+    transition: transform 0.2s ease;
+    width: 300px;
+    min-height: 150px;
+  }
+  
+  .kpi-highlight:hover {
+    transform: scale(1.02);
+  }
+  
+  .kpi-highlight h3 {
+    font-size: 1.75rem;
+    color: #c2185b;
+    margin-bottom: 12px;
+  }
+  
+  .kpi-highlight p {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #880e4f;
+    margin: 0;
+  }
+  
+  /* Center titles for non-highlight boxes */
+  .kpi-box h3:not(.kpi-highlight h3),
+  .kpis-box h3 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  /* Charts */
+  .chart {
     height: 100%;
-}
-#dailySalesChart {
+  }
+  
+  #dailySalesChart,
+  #monthlySalesChart,
+  #CategorySalesChart {
     width: 100%;
     height: 100%;
-}
-
-.member-name {
-    font-weight: 500;
-}
-
-.member-sales {
-font-weight: bold;
-}
-
-.client-table {
+  }
+  
+  /* Team Members Section */
+  #topMembers {
+    margin-top: 10px;
+  }
+  
+  .team-header {
     display: flex;
     justify-content: space-between;
-    padding: 6px 0;
-    border-bottom: 1px solid #eee;
- }
-.client-name {
-    font-weight: 500;
-}
-.client-sales {
-font-weight: bold;
-}
-#topMembers {
-    margin-top: 10px;
-}
-
-.team-member {
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+    padding: 8px 0;
+    margin-bottom: 5px;
+    font-size: 1rem;
+  }
+  
+  .team-member {
     display: flex;
     justify-content: space-between;
     padding: 6px 0;
     border-bottom: 1px solid #eee;
     font-size: 14px;
-}
-
-.team-header {
+  }
+  
+  .member-name,
+  .member-sales,
+  .member-services {
+    width: 33.3%;
+  }
+  
+  .member-name {
+    text-align: left;
+    font-weight: 500;
+  }
+  
+  .member-sales,
+  .member-services {
+    text-align: right;
     font-weight: bold;
-    border-bottom: 2px solid #ccc;
-    margin-bottom: 5px;
-}
+  }
+  
+  /* Clients */
+  .client-table {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .client-name {
+    font-weight: 500;
+  }
+  
+  .client-sales {
+    font-weight: bold;
+    text-align: right;
+  }
+  
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    
+  }
+  
+  .modal-content {
+    /* margin-top: 200px;
+    margin-left:1000px; */
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 95%;
+    max-width: 800px;
+    max-height: 80%;
+    overflow-y: auto;
+    transform: translate(-50%, -50%);
+    position: relative;
+    top: 50%;
+    left: 50%
+  }
+  
+  #channelDoughnutChart {
+    max-width: 100%;
+    height: auto;
+  }
 
 .visit-Date,
 .visit-teamMember,
@@ -93,46 +191,14 @@ font-weight: bold;
     width: 25%;
     text-align: left;
 }
-
 .member-name,
 .member-sales,
 .member-services {
     width: 33.3%; /*Even spacing */
     text-align: left;
 } 
-
 .visit-Sales,
 .member-sales,
 .member-services {
     text-align: right;
 }
-
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-}
-
-.modal-content {
-    margin-top: 200px;  
-    margin-left:500px;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 95%;
-    max-width: 800px;
-    max-height: 80%;
-    overflow-y: auto;
-}
-
-#channelDoughnutChart {
-    max-width: 100%;
-    height: auto;
-} 
