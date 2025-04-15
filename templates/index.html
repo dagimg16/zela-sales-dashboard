@@ -36,26 +36,33 @@
     </div>
   </div>
 
-  <!-- KPI Highlight Boxes -->
-  <div class="d-flex justify-content-center flex-wrap gap-3 mb-4">
-    <div id="totalSalesBox" class="kpi-box kpi-highlight">
-      <h3>Total Sales</h3>
-      <p id="salesAmount">$0.00</p>
-      <p id="salesChange" class="kpi-change"></p> 
-      
+  <!-- TOP 3 KPIs inside the container, with consistent spacing/width -->
+<div class="container">
+  <div class="row gx-3 mb-4">
+    <div class="col-md-4 mb-3 mb-md-0">
+      <div id="totalSalesBox" class="kpi-box">
+        <h3>Total Sales</h3>
+        <p id="salesAmount">$0.00</p>
+        <p id="salesChange" class="kpi-change up">+5%</p>
+      </div>
     </div>
-    <div id="numberSalesBOX" class="kpi-box kpi-highlight">
-      <h3>Number Of Services</h3>
-      <p id="numberSales">0</p>
-      <p id="numSalesChange" class="kpi-change"></p> 
+    <div class="col-md-4 mb-3 mb-md-0">
+      <div id="numberSalesBOX" class="kpi-box">
+        <h3>Number Of Services</h3>
+        <p id="numberSales">0</p>
+        <p id="numSalesChange" class="kpi-change down">-2%</p>
+      </div>
     </div>
-    <div id="averagesalesBox" class="kpi-box kpi-highlight">
-      <h3>Average Sale Value</h3>
-      <p id="averageSales">$0.00</p>
-      <p id="avgSalesChange" class="kpi-change"></p> 
+    <div class="col-md-4">
+      <div id="averagesalesBox" class="kpi-box">
+        <h3>Average Sale Value</h3>
+        <p id="averageSales">$0.00</p>
+        <p id="avgSalesChange" class="kpi-change none">0%</p>
+      </div>
     </div>
   </div>
-
+</div>
+  
   <!-- Remaining Dashboard -->
   <div class="container">
     <div id="dailySales" class="kpis-box chart">

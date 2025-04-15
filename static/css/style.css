@@ -40,45 +40,6 @@ body {
     flex: 1 1 300px;
   }
   
-  /* KPI Highlight Boxes */
-  .kpi-highlight {
-    background: linear-gradient(135deg, #ffe6f0, #fddde6);
-    border: 2px solid #f2b6cc;
-    text-align: center;
-    padding: 30px;
-    box-shadow: 0 4px 10px rgba(255, 153, 204, 0.25);
-    border-radius: 16px;
-    transition: transform 0.2s ease;
-    width: 300px;
-    min-height: 150px;
-  }
-  
-  .kpi-highlight:hover {
-    transform: scale(1.02);
-  }
-  
-  .kpi-highlight h3 {
-    font-size: 1.75rem;
-    /* color: #c2185b; */
-    margin-bottom: 12px;
-  }
-  
-  .kpi-highlight p {
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: #880e4f;
-    margin: 0;
-  }
-  
-  /* Center titles for non-highlight boxes */
-  .kpi-box h3:not(.kpi-highlight h3),
-  .kpis-box h3 {
-    text-align: center;
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    color: #333;
-  }
-  
   /* Charts */
   .chart {
     width: 100%;
@@ -185,9 +146,12 @@ body {
     text-align: right;
 }
 .kpi-change {
-    font-size: 15px !important;
-    margin-top: 4px;
-    font-weight: 500;
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 15px;
+  margin-top: 4px;
+  font-weight: 500;
 }
   
 .kpi-change.up {
@@ -200,4 +164,30 @@ body {
 
 .kpi-change.none {
     color: #888;
+}
+/* Subtle hover effect for top 3 KPI boxes */
+.d-flex > .kpi-box {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: default;
+}
+
+.d-flex > .kpi-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+/* Center title and value in top KPI cards */
+.d-flex > .kpi-box h3 {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.d-flex > .kpi-box p:not(.kpi-change) {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #880e4f;
+  margin: 0;
 }
