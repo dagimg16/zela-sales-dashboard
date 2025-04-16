@@ -9,6 +9,9 @@ let selectedYear = 2025;
 let selectedMonth = "04";
 let sortby = "Sales"
 let monthlySalesChartInstance = null;
+let categorySalesChartInstance;
+let doughnutChart;
+
 
 // Wait until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
@@ -461,38 +464,181 @@ function showModal(html) {
     document.getElementById("modal").style.display = "block";
   }
 
+// function plotSalesbyCategory(selectedStore, selectedYear, selectedMonth){
+//     fetch(`/api/sales-by-category?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
+//     .then(res => res.json())
+//     .then(categorySales=> {
+//        console.log("fetched sales-by-category data successfully");
+//        console.log(categorySales)
+//        const categories = categorySales.map(cat => cat.Category).reverse();
+//        const sales = categorySales.map(sal => sal.MonthlySales).reverse();
+
+//        const data= [{
+//            type: 'bar',
+//            x: sales,
+//            y: categories,
+//            orientation: 'h',
+//            marker: {
+//                color: 'rgba(99,132,255,0.7)',
+//                line: {
+//                    width: 1.5,
+//                    color: 'rgba(99, 132, 255, 1)'
+//                },
+//                barThickness: 30,
+//                maxBarThickness: 40
+//            }
+//        }];
+
+//        const layout = {
+//            title: {
+//                text: 'Sales by Category ($)',
+//                font: {
+//                    size: 20,
+//                    family: 'Arial, sans-serif'
+//                },
+//                xref: 'paper',
+//                x: 0,
+//                y: 1.1,
+//                yanchor: 'bottom'
+//            },
+//            xaxis: {
+//                title: {
+//                    text: 'Sales ($)',
+//                    font: {
+//                        size: 14,
+//                        color: '#555'
+//                    }
+//                },
+//                tickformat: ',.0f',
+//                gridcolor: '#eee',
+//                zeroline: true,
+//                zerolinecolor: '#eee',
+//                zerolinewidth: 2
+//            },
+//            yaxis: {
+//                title: {
+//                    text: '',
+//                    font: {
+//                        size: 14,
+//                        color: '#555'
+//                    }
+//                },
+//                automargin: true 
+//            },
+//            margin: {
+//                l: 60,
+//                r: 20,
+//                t: 60,
+//                b: 40
+//            },
+//            showlegend: false
+//        };
+
+//        Plotly.newPlot('CategorySalesChart', data, layout);
+//     })
+//     .catch(error => console.error('Error fetching sales-by-category data:', error));
+// }
+
 function plotSalesbyCategory(selectedStore, selectedYear, selectedMonth){
-     fetch(`/api/sales-by-category?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
-     .then(res => res.json())
-     .then(categorySales=> {
-        console.log("fetched sales-by-category data successfully");
-        console.log(categorySales)
-        const category = categorySales.map(cat => cat.Category).reverse();
-        const sales = categorySales.map(sal => sal.MonthlySales).reverse();
+    fetch(`/api/sales-by-category?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
+    .then(res => res.json())
+    .then(categorySales=> {
+       console.log("fetched sales-by-category data successfully");
+       console.log(categorySales)
+       const categories = categorySales.map(cat => cat.Category);
+       const sales = categorySales.map(sal => sal.MonthlySales);
 
-        let barData = [{
-            x: sales,
-            y: category,
-            type : "bar",
-            orientation: "h"
-          }]
-      
-          let barlayout = {
-            width: 500,
-            height: 400
-          };
-      
-          
-          Plotly.newPlot("CategorySalesChart", barData, barlayout)
+       const config = {
+           type : "bar",
+           data: {
+               labels: categories,
+               datasets: [{
+                   label: 'Sales by Category ($)',
+                   data: sales,
+                   backgroundColor: 'rgba(99,132,255,0.7)',
+                   borderRadius: 6,
+                   barThickness: 28,
+                   maxBarThickness: 30
+               }]
+           },
+           options: {
+               indexAxis: 'y',
+               responsive: true,
+               maintainAspectRatio: false,
+               layout: {
+                   padding: { top:20, right: 20, left: 20, bottom: 20 }
+               },
+               plugins: {
+                   legend: { display: false },
+                   title: {
+                       display: true,
+                       text: 'Sales by Category ($)',
+                       align: 'start',
+                       font: { size: 20, weight: 'normal', family: 'Arial, sans-serif'},
+                       color: '#333',
+                       padding: { bottom: 20 }
+                   },
+                   tooltip: {
+                       backgroundColor: '#ffffff',
+                       titleFont: { size: 14 },
+                       bodyFont: { size: 12 },
+                       callbacks: {
+                           label: ctx => `Sales: ${ctx.raw.toLocaleString()}`
+                       }
+                   }
+               },
+               scales: {
+                   x: {
+                       beginAtZero: true,
+                       title: {
+                           display: true,
+                           text: 'Sales ($)',
+                           font: { size: 14 },
+                           color: '#555'
+                       },
+                       ticks: {
+                           font: { size: 12 },
+                           color: '#333',
+                           callback: value => `${value.toLocaleString()}`
+                       },
+                       grid: {
+                           color: '#eee',
+                           borderDash: [4,4]
+                       }
+                   },
+                   y: {
+                       title: {
+                           display: true,
+                           text: 'Category',
+                           font: { size: 14 },
+                           color: '#555'
+                       },
+                       ticks: {
+                           font: { size: 12 },
+                           color: '#333'
+                       },
+                       grid: {
+                           display: false
+                       }
+                   }
+               }
+           }
+       };
 
-
-
-     })
-     .catch(error => console.error('Error fetching sales-by-category data:', error));
-;
+       if(categorySalesChartInstance) {
+           categorySalesChartInstance.destroy();
+       }
+    
+         
+         const barchart = document.getElementById('CategorySalesChart').getContext('2d');
+         categorySalesChartInstance = new Chart(barchart, config);
+    })
+    .catch(error => console.error('Error fetching sales-by-category data:', error));
 }
 
-let doughnutChart;
+
+
+
 async function displayDoughnutChart(selectedStore, selectedYear, selectedMonth) {
     try{
         const response = await fetch(`/api/sales-by-channel?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
