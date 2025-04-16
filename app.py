@@ -1,4 +1,6 @@
 from flask import Flask, render_template, jsonify, request
+from collections import defaultdict
+import statistics
 import sqlite3
 import os
 from functools import wraps
@@ -108,7 +110,8 @@ def get_daily_sales():
     branch = request.args.get('store')
 
     query = """
-        SELECT strftime('%d', Date) as Day, SUM("Total sales") as DailySales
+        SELECT strftime('%d', Date) as Day, SUM("Total sales") as DailySales,
+        COUNT(DISTINCT "Team member") AS TeamMembersWorked
         FROM sales_data 
         WHERE Store = ? 
             AND strftime('%Y', Date) = ? 
@@ -201,12 +204,10 @@ def client_history():
     client = request.args.get('client')
 
     query = """
-    SELECT strftime('%Y-%m-%d', Date) as Date, "Team member" as teamMember, Category as Service, SUM("Total sales") as sales
+    SELECT strftime('%Y-%m-%d', Date) as Date, "Team member" as teamMember, Category as Service, "Total sales" as sales
     FROM sales_data
     WHERE Client = ?
-    GROUP BY teamMember
     ORDER BY Date DESC
-    LIMIT 10
     """
     args= (client,)
     clientHistory = query_db(query, args)
@@ -229,8 +230,95 @@ def get_sales_by_channel():
         """
     args= (branch,year, month)
     channel_sales = query_db(query, args)
-    return  jsonify(channel_sales)                  
+    return  jsonify(channel_sales) 
+                 
+@app.route("/api/team-risk")
+def get_team_risk():
+    
+    retantion_query = """
+    SELECT 
+        "Team member" AS teamMember,
+        COUNT(*) AS totalAppointments,
+        COUNT(DISTINCT Client) AS uniqueClients
+        FROM sales_data
+        WHERE Store = ?
+         AND "Team member" NOT IN (
+        'Bris', 'Evelyn','Hadel','Mary','Favi',
+        'XImena','Anahi','Adalu','Karla','Rocio','Lily', 'Celeste')
+        GROUP BY "Team member"
+    """
+    args= (1,)
+    retention_data = query_db(retantion_query,args)
 
+    trend_query = """
+        SELECT 
+        "Team member",
+        strftime('%Y-%m', Date) AS month,
+        COUNT(*) AS serviceCount
+        FROM sales_data
+        WHERE Store = ?
+         AND "Team member" NOT IN (
+        'Bris', 'Evelyn','Hadel','Mary','Favi',
+        'XImena','Anahi','Adalu','Karla','Rocio','Lily', 'Celeste')
+        GROUP BY "Team member", month
+    """
+    args= (1,)
+    trend_data = query_db(trend_query,args)
+
+    category_query = """
+        SELECT 
+        "Team member",
+        COUNT(DISTINCT Category) AS numCategories
+        FROM sales_data
+        WHERE Store = ?
+         AND "Team member" NOT IN (
+        'Bris', 'Evelyn','Hadel','Mary','Favi',
+        'XImena','Anahi','Adalu','Karla','Rocio','Lily', 'Celeste')
+        GROUP BY "Team member"
+    """
+    args= (1,)
+    category_data = query_db(category_query, args)
+    service_trend = defaultdict(list)
+    for row in trend_data:
+            service_trend[row["Team member"]].append((row["month"], row["serviceCount"]))
+
+    risk_report = []
+    #For each member analyze retention ratio, monthly drop, 
+    for member in retention_data:
+        name = member["teamMember"]
+        total = member["totalAppointments"]
+        unique = member["uniqueClients"]
+        retention = round(total / unique, 2) if unique else 0
+        
+        # Get trend data for this person
+        history = sorted(service_trend[name], key=lambda x: x[0])
+        last_month = history[-2][1] if history else 0
+        avg_volume = round(statistics.mean([h[1] for h in history[:-1]]), 2) if len(history) > 1 else last_month
+        drop_pct = round(((avg_volume - last_month) / avg_volume) * 100, 1) if avg_volume else 0
+
+        # Category count
+        category_match = next((c["numCategories"] for c in category_data if c["Team member"] == name), 1)
+        # Risk score
+        
+        score = 0
+        if retention < 2.0 or retention > 2.6:
+            score += 1
+        if drop_pct > 20: score += 1
+        if category_match <= 2: score += 1
+        if avg_volume > 323: score += 1
+
+        level = "High" if score >= 3 else "Medium" if score >= 1 else "Low"
+
+        risk_report.append({
+            "teamMember": name,
+            "retentionRatio": retention,
+            "monthlyDrop": drop_pct,
+            "numCategories": category_match,
+            "avgMonthlySalesVolume": avg_volume,
+            "riskScore": score,
+            "riskLevel": level
+        })
+    return jsonify(risk_report)
 
 if __name__ == "__main__":
     debug_mode = os.environ.get('FLASK_ENV') == 'development'

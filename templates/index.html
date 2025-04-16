@@ -37,31 +37,31 @@
   </div>
 
   <!-- TOP 3 KPIs inside the container, with consistent spacing/width -->
-<div class="container">
-  <div class="row gx-3 mb-4">
-    <div class="col-md-4 mb-3 mb-md-0">
-      <div id="totalSalesBox" class="kpi-box">
-        <h3>Total Sales</h3>
-        <p id="salesAmount">$0.00</p>
-        <p id="salesChange" class="kpi-change up">+5%</p>
+  <div class="container">
+    <div class="d-flex gap-3 mb-4">
+      <div class="col-md-4">
+        <div id="totalSalesBox" class="kpi-box">
+          <h3>Total Sales</h3>
+          <p id="salesAmount" class="kpi-value">$0.00</p>
+          <p id="salesChange" class="kpi-change up"></p>
+        </div>
       </div>
-    </div>
-    <div class="col-md-4 mb-3 mb-md-0">
-      <div id="numberSalesBOX" class="kpi-box">
-        <h3>Number Of Services</h3>
-        <p id="numberSales">0</p>
-        <p id="numSalesChange" class="kpi-change down">-2%</p>
+      <div class="col-md-4">
+        <div id="numberSalesBOX" class="kpi-box">
+          <h3>Number Of Services</h3>
+          <p id="numberSales" class="kpi-value">0</p>
+          <p id="numSalesChange" class="kpi-change down"></p>
+        </div>
       </div>
-    </div>
-    <div class="col-md-4">
-      <div id="averagesalesBox" class="kpi-box">
-        <h3>Average Sale Value</h3>
-        <p id="averageSales">$0.00</p>
-        <p id="avgSalesChange" class="kpi-change none">0%</p>
+      <div class="col-md-4">
+        <div id="averagesalesBox" class="kpi-box">
+          <h3>Average Sale Value</h3>
+          <p id="averageSales" class="kpi-value">$0.00</p>
+          <p id="avgSalesChange" class="kpi-change none"></p>
+        </div>
       </div>
     </div>
   </div>
-</div>
   
   <!-- Remaining Dashboard -->
   <div class="container">
@@ -98,12 +98,15 @@
     <div class="kpis-box chart">
       <h3>Sales by Category</h3>
       <div id="CategorySalesChart"></div>
-      <div class="kpis-box">
-        <h3>Customer Reviews</h3>
-        <!-- Elfsight Google Reviews | Zela Nail Google Reviews -->
-        <script src="https://static.elfsight.com/platform/platform.js" async></script>
-        <div class="elfsight-app-d9bdfb4e-3f54-4ac1-801e-d51e6eed29d0" data-elfsight-app-lazy></div>
-      </div>
+    </div>
+    <div class="kpis-box">
+      <h3>Team Member Risk Monitor</h3>
+      <table id="teamRiskTable" class="table table-striped"></table>
+    </div>
+    <div class="kpis-box">
+      <!-- Elfsight Google Reviews | Zela Nail Google Reviews -->
+      <script src="https://static.elfsight.com/platform/platform.js" async></script>
+      <div class="elfsight-app-d9bdfb4e-3f54-4ac1-801e-d51e6eed29d0" data-elfsight-app-lazy></div>
     </div>
   </div>
 

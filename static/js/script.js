@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
     changeFiltersAndDashboard(selectedStore, selectedYear, selectedMonth, sortby);
+    teamMemberRiskReport();
 
 });
 
@@ -201,6 +202,7 @@ function plotLineChart(selectedStore, selectedYear, selectedMonth) {
         .then(dailySales => {
             const days = dailySales.map(sale => sale.Day);
             const sales = dailySales.map(sale => sale.DailySales);
+            const teamMembers = dailySales.map(sale => sale.TeamMembersWorked);
 
             let linechart = [{
                 x: days,
@@ -211,15 +213,27 @@ function plotLineChart(selectedStore, selectedYear, selectedMonth) {
                 line: { shape: 'spline',width: 3},
                 marker: {size: 6, color: '#636EFA'},
                 hovertemplate: 'Day: %{x}<br>Sales: $%{y}<extra></extra>'
-            }];
+            },
+            {
+                x: days,
+                y: teamMembers,
+                mode: 'lines+markers',
+                type: 'scatter',
+                name: 'Team Members',
+                line: { shape: 'spline', width: 3, dash: 'dot' },
+                marker: { size: 6, color: '#EF553B' },
+                yaxis: 'y2',
+                hovertemplate: 'Day: %{x}<br>Team Members: %{y}<extra></extra>'
+            }
+             ];
             
             let linechartlayout = {
-                title: {text: 'Daily Sales Trend ($)',
+                title: {text: 'Daily Sales Trend ($) and Team Members',
                         font: {size: 20, color: '#333'},
                         x: 0.05},
                 width: 500,
                 height: 400,
-                margin: { t: 60, b: 50, l: 60, r: 30 },
+                margin: { t: 60, b: 50, l: 60, r: 60 },
                 xaxis: {
                     title: 'Day',
                     titlefont: { size: 14 },
@@ -232,6 +246,19 @@ function plotLineChart(selectedStore, selectedYear, selectedMonth) {
                     tickfont: { size: 12 },
                     gridcolor: '#eee',
                     zeroline: false
+                },
+                yaxis2: {
+                    overlaying: 'y',
+                    side: 'right',
+                    showgrid: false,
+                    tickfont: { size: 12, color: '#EF553B' },
+                    titlefont: { size: 14, color: '#EF553B' }
+                },
+                legend: {
+                    orientation: 'h',
+                    x: 0.5,
+                    xanchor: 'center',
+                    y: -0.2
                 },
                 plot_bgcolor: '#fff',
                 paper_bgcolor: '#fff',
@@ -531,4 +558,38 @@ async function displayDoughnutChart(selectedStore, selectedYear, selectedMonth) 
     }catch (error){
         console.error('Error fetching channel data:', error);
     }
+}
+function teamMemberRiskReport(){
+    fetch("/api/team-risk")
+    .then(res => res.json())
+    .then(report => {
+        const riskTable = document.getElementById("teamRiskTable");
+        riskTable.innerHTML = `
+        <tr>
+            <th>Name</th>
+            <th>Retention</th>
+            <th>Drop %</th>
+            <th>Categories</th>
+            <th>Volume</th>
+            <th>Score</th>
+            <th>Risk</th>
+        </tr>
+        `;
+
+    report.forEach(member => {
+      const row = document.createElement("tr");
+      const riskColor = member.riskLevel === "High" ? "red" : member.riskLevel === "Medium" ? "orange" : "green";
+
+        row.innerHTML = `
+            <td>${member.teamMember}</td>
+            <td>${member.retentionRatio}</td>
+            <td>${member.monthlyDrop}%</td>
+            <td>${member.numCategories}</td>
+            <td>${member.avgMonthlySalesVolume}</td>
+            <td>${member.riskScore}</td>
+            <td style="color:${riskColor}">${member.riskLevel}</td>
+        `;
+        riskTable.appendChild(row);
+    });
+  });
 }
