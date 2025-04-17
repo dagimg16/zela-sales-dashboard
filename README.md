@@ -105,6 +105,9 @@ The analysis focuses on calculating key metrics, including total sales,  average
 ### Visuals and explanations 
 
 •	KPI Boxes: Display total sales, number of services, and average sale value.
+
+<img width="782" alt="Screenshot 2025-04-17 at 11 26 12 AM" src="https://github.com/user-attachments/assets/f7e7960d-0521-41f1-80db-4e82d90f2b37" />
+
 •	Sales Charts: Daily and monthly sales trends visualizing using line and bar charts.
 •	Top members and Clients: Lists of top-performing team members and clients.
 •	Doughnut Chart: Visual representation of appoinments by channel.
