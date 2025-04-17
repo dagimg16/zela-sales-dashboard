@@ -640,7 +640,7 @@ function teamMemberRiskReport(selectedMonth, selectedYear){
             <th>Name</th>
             <th>Retention</th>
             <th>Drop %</th>
-            <th>Categories</th>
+            <th>Mani/Pedi Ratio</th>
             <th>Volume</th>
             <th>Score</th>
             <th>Risk</th>
@@ -655,7 +655,7 @@ function teamMemberRiskReport(selectedMonth, selectedYear){
             <td>${member.teamMember}</td>
             <td>${member.retentionRatio}</td>
             <td>${member.monthlyDrop}%</td>
-            <td>${member.numCategories}</td>
+            <td>${member.maniPediRatio}%</td>
             <td>${member.avgMonthlySalesVolume}</td>
             <td>${member.riskScore}</td>
             <td style="color:${riskColor}">${member.riskLevel}</td>

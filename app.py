@@ -273,22 +273,34 @@ def get_team_risk():
     category_query = """
         SELECT 
         "Team member",
-        COUNT(DISTINCT Category) AS numCategories
+        Category,
+        COUNT(*) AS serviceCount
         FROM sales_data
         WHERE Store = ?
          AND "Team member" NOT IN (
         'Bris', 'Evelyn','Hadel','Mary','Favi',
         'XImena','Anahi','Adalu','Karla','Rocio','Lily', 'Celeste')
-        GROUP BY "Team member"
+        GROUP BY "Team member", Category
     """
     args3= (1,)
     category_data = query_db(category_query, args3)
 
+    service_summary = defaultdict(lambda: {"total": 0, "mani_pedi": 0})
     service_trend = defaultdict(list)
     for row in trend_data:
             service_trend[row["Team member"]].append((row["month"], row["serviceCount"]))
 
+    for row in category_data:
+        name = row["Team member"]
+        category = row["Category"]
+        count = row["serviceCount"]
+
+        service_summary[name]["total"] += count
+        if category == "Manicure / Pedicure":
+            service_summary[name]["mani_pedi"] += count
+
     risk_report = []
+
     #For each member analyze retention ratio, monthly drop, 
     for member in retention_data:
         name = member["teamMember"]
@@ -302,15 +314,17 @@ def get_team_risk():
         avg_volume = round(statistics.mean([h[1] for h in history[:-1]]), 2) if len(history) > 1 else last_month
         drop_pct = round(((avg_volume - last_month) / avg_volume) * 100, 1) if avg_volume else 0
 
-        # Category count
-        category_match = next((c["numCategories"] for c in category_data if c["Team member"] == name), 1)
+        # Category Manicure/Pedicure ratio
+        mani_ratio = 0
+        if name in service_summary and service_summary[name]["total"] > 0:
+            mani_ratio = service_summary[name]["mani_pedi"] / service_summary[name]["total"]
         # Risk score
         
         score = 0
         if retention < 2.0 or retention > 2.6:
             score += 1
         if drop_pct > 20: score += 1
-        if category_match <= 2: score += 1
+        if mani_ratio > 0.5: score += 1
         if avg_volume > 323: score += 1
 
         level = "High" if score >= 3 else "Medium" if score >= 1 else "Low"
@@ -319,7 +333,7 @@ def get_team_risk():
             "teamMember": name,
             "retentionRatio": retention,
             "monthlyDrop": drop_pct,
-            "numCategories": category_match,
+            "maniPediRatio": round(mani_ratio * 100, 2),
             "avgMonthlySalesVolume": avg_volume,
             "riskScore": score,
             "riskLevel": level
