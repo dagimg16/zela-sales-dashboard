@@ -81,7 +81,8 @@ The analysis focuses on calculating key metrics, including total sales,  average
 •	Team member risk monitor 
 
 
-![Screenshot 2025-04-17 at 2 11 53 PM](https://github.com/user-attachments/assets/04c3a6d5-3f57-4bc5-8a94-e1f2471f686e)
+![Screenshot 2025-04-17 at 6 28 15 PM](https://github.com/user-attachments/assets/60b70692-c6bf-4327-8105-57e65a3c3873)
+
 
 
 
