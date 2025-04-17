@@ -179,7 +179,23 @@ All sales in 2023 were conducted through walk-ins or offline channels. Online se
      
 Despite over 40% of appointments still being made through offline channels, Instagram has demonstrated consistent growth, particularly in 2025, indicating that marketing efforts on social media are effectively reaching customers. Additionally, the "Book Now" link and Fresha app are utilized by customers from these social media platforms to book their appointments.    
      
+##### Customer Review
+
+Following are some of the customer patterns:   
      
+Oldest Customers: The salon's most loyal clients include Sin Cita, Valeria Galvan, Dany De la Garza, Lore Gamez, Adriana Perez, and Andrea Martinez. These customers visit multiple times each month, spending between $300 and $500 per visit.       
+      
+Lost Customers: Regina Carral, Magaly Saenz, and Natalia Gasson are among the clients who have not returned after their initial visits. Some of these customers did revisit briefly but ultimately did not continue their support.      
+     
+Regained Customers: Lindsay Powers is a notable example of a client who was lost in May 2023 but returned in November 2024. She has since become a regular, visiting twice a month and spending under $500 each time.    
+      
+Recent Regulars: New regular customers include Cynthia Cuesta, Patricia Vidal, and Amadita, indicating a positive trend in client retention and engagement.   
+     
+##### Sales Review by Category
+          
+In January 2023, sales for manicure and pedicure services reached $100,000, with acrylics generating $50,000 and hair services contributing $10,000. Throughout the year, manicure and pedicure sales consistently increased, peaking at $183,000 in August. Acrylic sales also experienced significant growth, reaching $100,000 in November and $145,000 in December.     
+      
+In 2024, acrylic sales surged to $156,000 in February, while gel and regular polish gained popularity, generating nearly $55,000. Manicure and pedicure services also contributed $55,000. However, September saw a decline in sales, with acrylics dropping to $68,000, largely due to an employee shortage that affected overall performance. Sales rebounded in October and remained strong through December, with acrylics at $130,000, gel and regular polish at $78,000, manicure and pedicure services at $51,000, and hair services at $40,000. Overall, the data reflects a robust performance in manicure and pedicure services as well as acrylics, despite fluctuations in other categories throughout the year.      
 	
 ## Limitations and Future Development
       
