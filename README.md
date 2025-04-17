@@ -158,9 +158,33 @@ In addition to the core functionalities of the dashboard, we have integrated a *
 
 ## Major findings
       
-Peak sales period?
-Highest and lowest sales.
-Top clients contributing to revenue
+      
+##### Peak Sales Period
+
+The analysis indicates that Zela Nails and Salon experiences peak sales on Fridays and Saturdays. This trend suggests that customers prefer to book their beauty services on weekends, likely due to work commitments during the week and social events occurring on weekends. By understanding this pattern, the salon can optimize staffing and inventory levels to effectively meet the increased demand during these busy periods.
+
+##### Sales Performance
+
+In 2023, the highest sales were recorded in December, coinciding with the holiday season when customers are more inclined to indulge in beauty services. June and August also saw elevated sales, likely related to the school year’s closing and opening. Conversely, January and February experienced the lowest sales, indicating a potential seasonal dip.          
+           
+In 2024, sales remained consistent throughout the year; however, a significant drop occurred in August and September due to employee departures. After addressing staffing issues, the salon rebounded and achieved its highest sales of the year in October.         
+          
+These insights can inform marketing strategies, such as offering discounts on weekdays or launching promotional campaigns during slower months to boost sales.
+
+##### Employee Performance
+
+      
+The dashboard identified top-performing employees based on sales generated and the number of services provided. Recognizing these individuals not only boosts morale but also offers an opportunity to analyze their techniques and customer interaction styles, which can be shared as best practices across the team.    
+      
+From the team member risk monitor, we can identify those who are highly skilled and may require additional support to ensure their satisfaction. Offering incentives or bonuses can maintain high performance, reduce turnover, and encourage all team members to strive for excellence by highlighting the rewards available. Additionally, training new team members in these best practices can help prevent potential staff departures, safeguarding the business's stability and success.
+
+##### Appointment Channel Analysis
+     
+All sales in 2023 were conducted through walk-ins or offline channels. Online services, including Instagram, the "Book Now" link, and bookings through the Fresha app, were introduced in 2024.    
+     
+Despite over 40% of appointments still being made through offline channels, Instagram has demonstrated consistent growth, particularly in 2025, indicating that marketing efforts on social media are effectively reaching customers. Additionally, the "Book Now" link and Fresha app are utilized by customers from these social media platforms to book their appointments.    
+     
+     
 	
 ## Limitations and Future Development
       
