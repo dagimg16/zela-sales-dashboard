@@ -464,81 +464,6 @@ function showModal(html) {
     document.getElementById("modal").style.display = "block";
   }
 
-// function plotSalesbyCategory(selectedStore, selectedYear, selectedMonth){
-//     fetch(`/api/sales-by-category?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
-//     .then(res => res.json())
-//     .then(categorySales=> {
-//        console.log("fetched sales-by-category data successfully");
-//        console.log(categorySales)
-//        const categories = categorySales.map(cat => cat.Category).reverse();
-//        const sales = categorySales.map(sal => sal.MonthlySales).reverse();
-
-//        const data= [{
-//            type: 'bar',
-//            x: sales,
-//            y: categories,
-//            orientation: 'h',
-//            marker: {
-//                color: 'rgba(99,132,255,0.7)',
-//                line: {
-//                    width: 1.5,
-//                    color: 'rgba(99, 132, 255, 1)'
-//                },
-//                barThickness: 30,
-//                maxBarThickness: 40
-//            }
-//        }];
-
-//        const layout = {
-//            title: {
-//                text: 'Sales by Category ($)',
-//                font: {
-//                    size: 20,
-//                    family: 'Arial, sans-serif'
-//                },
-//                xref: 'paper',
-//                x: 0,
-//                y: 1.1,
-//                yanchor: 'bottom'
-//            },
-//            xaxis: {
-//                title: {
-//                    text: 'Sales ($)',
-//                    font: {
-//                        size: 14,
-//                        color: '#555'
-//                    }
-//                },
-//                tickformat: ',.0f',
-//                gridcolor: '#eee',
-//                zeroline: true,
-//                zerolinecolor: '#eee',
-//                zerolinewidth: 2
-//            },
-//            yaxis: {
-//                title: {
-//                    text: '',
-//                    font: {
-//                        size: 14,
-//                        color: '#555'
-//                    }
-//                },
-//                automargin: true 
-//            },
-//            margin: {
-//                l: 60,
-//                r: 20,
-//                t: 60,
-//                b: 40
-//            },
-//            showlegend: false
-//        };
-
-//        Plotly.newPlot('CategorySalesChart', data, layout);
-//     })
-//     .catch(error => console.error('Error fetching sales-by-category data:', error));
-// }
-
 function plotSalesbyCategory(selectedStore, selectedYear, selectedMonth){
     fetch(`/api/sales-by-category?store=${selectedStore}&year=${selectedYear}&month=${selectedMonth}`)
     .then(res => res.json())
@@ -579,7 +504,7 @@ function plotSalesbyCategory(selectedStore, selectedYear, selectedMonth){
                        padding: { bottom: 20 }
                    },
                    tooltip: {
-                       backgroundColor: '#ffffff',
+                       backgroundColor: '#333',
                        titleFont: { size: 14 },
                        bodyFont: { size: 12 },
                        callbacks: {
