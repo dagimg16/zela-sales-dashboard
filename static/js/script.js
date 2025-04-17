@@ -9,7 +9,7 @@ let selectedYear = 2025;
 let selectedMonth = "04";
 let sortby = "Sales"
 let monthlySalesChartInstance = null;
-let categorySalesChartInstance;
+let categorySalesChartInstance = null;
 let doughnutChart;
 
 
@@ -549,14 +549,12 @@ function plotSalesbyCategory(selectedStore, selectedYear, selectedMonth){
                }
            }
        };
+            if(categorySalesChartInstance) {
+                categorySalesChartInstance.destroy();
+            }
 
-       if(categorySalesChartInstance) {
-           categorySalesChartInstance.destroy();
-       }
-    
-         
-         const barchart = document.getElementById('CategorySalesChart').getContext('2d');
-         categorySalesChartInstance = new Chart(barchart, config);
+        const barchart = document.getElementById('CategorySalesChart').getContext('2d');
+        categorySalesChartInstance = new Chart(barchart, config);
     })
     .catch(error => console.error('Error fetching sales-by-category data:', error));
 }
