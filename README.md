@@ -109,9 +109,35 @@ The analysis focuses on calculating key metrics, including total sales,  average
 <img width="782" alt="Screenshot 2025-04-17 at 11 26 12 AM" src="https://github.com/user-attachments/assets/f7e7960d-0521-41f1-80db-4e82d90f2b37" />
 
 •	Sales Charts: Daily and monthly sales trends visualizing using line and bar charts.
-•	Top members and Clients: Lists of top-performing team members and clients.
+
+<img width="667" alt="Screenshot 2025-04-17 at 11 28 10 AM" src="https://github.com/user-attachments/assets/6f2c490e-3074-4394-943f-f8602a48c344" />
+
+<img width="660" alt="Screenshot 2025-04-17 at 11 28 23 AM" src="https://github.com/user-attachments/assets/a2d96d3e-d083-4726-b487-c83bf4f10149" />
+
+
+•	Top members and Clients: Lists of top-performing team members and clients with a pop-up client history.
+
+<img width="446" alt="Screenshot 2025-04-17 at 11 28 44 AM" src="https://github.com/user-attachments/assets/a24c5586-a7ca-4538-ac67-d27dc50c5d92" />
+
+<img width="880" alt="Screenshot 2025-04-17 at 11 29 32 AM" src="https://github.com/user-attachments/assets/701ba6ce-4ab9-4b06-ab5f-07e6c26cfd7f" />
+
+
 •	Doughnut Chart: Visual representation of appoinments by channel.
-•	Category Sales chart: Breakdown of sales by service category.
+
+<img width="451" alt="Screenshot 2025-04-17 at 11 29 42 AM" src="https://github.com/user-attachments/assets/661c1785-49b6-416f-a2d0-daa2bfc26d92" />
+
+•	Category Sales chart: Breakdown of sales by services.
+
+
+<img width="651" alt="Screenshot 2025-04-17 at 11 29 54 AM" src="https://github.com/user-attachments/assets/df097246-1bc2-4531-8fd0-b2d26e207023" />
+
+•	Team member risk monitor 
+
+
+<img width="632" alt="Screenshot 2025-04-17 at 11 30 14 AM" src="https://github.com/user-attachments/assets/3b853884-4568-438b-9baf-5481e273521c" />
+
+
+
 
 ## Additional explanations
        
@@ -123,6 +149,12 @@ The dashboard is built using HTML, CSS, and JavaScript, leveraging libraries suc
 |Backend	|Flask   (Python)|
 |Database	|SQLite|
 |Data Source	|Zela Nails & Salon sales data|
+
+
+In addition to the core functionalities of the dashboard, we have integrated a **free Google Review widget** into the project. This widget allows users to display and manage customer reviews directly on the dashboard, providing valuable social proof and enhancing customer engagement. By showcasing real-time feedback from clients, Zela Nails can better understand customer satisfaction and make informed decisions to improve services.
+
+<img width="1327" alt="Screenshot 2025-04-17 at 11 30 35 AM" src="https://github.com/user-attachments/assets/05e5286e-0e7a-43f3-9789-d41f2a0a5a92" />
+
 
 ## Major findings
       
