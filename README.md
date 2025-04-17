@@ -4,78 +4,29 @@
      
 This project aims to develop an interactive, data-driven dashboard for Zela Nails and Salon, a premier beauty service provider with two locations. The Dashboard will give the business real-time insights into sales performance, customer behavior, team productivity, and booking trends. Visualized key performance indicators (KPIs) and data will help the business owners make future decisions and plan strategically.
       
-## Usage and installation instructions
+## Usage & Installation Instructions
      
-To run the Zela Nails Dashboard locally, follow these steps:    
-     
-#### 1. Clone the Repository    
+### Prerequisites
 
-To clone the repository into our local machine, type the following code in your terminal/bash: 
-```
-git clone https://github.com/dagimg16/zela-sales-dashboard
-```
-Then change into the folder, using the following command:
-```
-cd zela-sales-dashboard
-```
-                      
-#### 2. Install Dependencies     
-            
-Python: Ensure you have Python installed (version 3.7 or higher)
-     
-Libraries: Install the required libraries using pip:
-```
-pip install Flask
-pip install pandas
-pip install matplotlib
-pip install seaborn
-pip install numpy
-pip install scikit-learn
-```
-      
-All required dependencies are listed in the **requirements.txt** file. You can either install them individually or use the following command to install all at once:
-```
+- Python 3.10+
+- SQLite (data is stored locally)
+
+### Installation
+
+Clone the repo and run:
+
+```bash
 pip install -r requirements.txt
 ```
-            
-In your Flask application, you will need to include the following imports at the beginning of your Python script:
-```    
-from flask import Flask, render_template, jsonify, request
-import sqlite3
-import os
-from functools import wraps
+
+### Start the App
+
+```bash
+flask run
 ```
+Then visit: `http://127.0.0.1:5000/`
 
-|Function/ Library	|Description|
-|-----------------	|-----------|
-|**Flask** 		|The main class for creating a Flask web application.|
-|**render_template** 	|A function to render HTML templates.|
-|**jsonify**	 	|A function to convert Python dictionaries to JSON format for API responses.|
-|**request** 		|An object to handle incoming request data.|
-|**sqlite3** 		|A library for interacting with SQLite databases.|
-|**os** 		|A module for interacting with the operating system, useful for file path management.|
-|**wraps** 		|A decorator from the functools module that helps preserve the metadata of the original function when creating decorators.|
-
-	
-#### 3. Frontend Libraries
-       
-* **Bootstrap**: A front-end framework for responsive and mobile-first web design.
-* **Chart.js**: A JavaScript library for creating interactive and animated charts.
-* **Chart.js Plugin** for Data labels: An extension that displays data values directly on charts.
-* **D3.js**: A powerful library for manipulating documents based on data for complex visualizations.
-* **Plotly**: A library for creating interactive graphs and advanced data visualizations.
-
-
-#### 4. Run the Application:
-
-Launch the Visual Studio Code (VSCode) application and open the cloned project folder.    
-      
-Open the terminal/bash within VSCode and run the following command to start the Flask server:
-```
-python app.py
-```
-Once the server is running, click on the URL link to access the dashboard, or open your web browser and navigate to the following URL:**http://127.0.0.1:5000**
-
+---
 
 ## Project goals
      
