@@ -234,7 +234,10 @@ def get_sales_by_channel():
                  
 @app.route("/api/team-risk")
 def get_team_risk():
-    
+    year = request.args.get('year')
+    month = request.args.get('month')                                             
+    year_month = f"{year}-{month}"
+
     retantion_query = """
     SELECT 
         "Team member" AS teamMember,
@@ -242,12 +245,13 @@ def get_team_risk():
         COUNT(DISTINCT Client) AS uniqueClients
         FROM sales_data
         WHERE Store = ?
+         AND strftime('%Y-%m', Date) <= ?
          AND "Team member" NOT IN (
         'Bris', 'Evelyn','Hadel','Mary','Favi',
         'XImena','Anahi','Adalu','Karla','Rocio','Lily', 'Celeste')
         GROUP BY "Team member"
     """
-    args= (1,)
+    args= (1,year_month)
     retention_data = query_db(retantion_query,args)
 
     trend_query = """
@@ -257,13 +261,14 @@ def get_team_risk():
         COUNT(*) AS serviceCount
         FROM sales_data
         WHERE Store = ?
-         AND "Team member" NOT IN (
+        AND strftime('%Y-%m', Date) <= ?
+        AND "Team member" NOT IN (
         'Bris', 'Evelyn','Hadel','Mary','Favi',
         'XImena','Anahi','Adalu','Karla','Rocio','Lily', 'Celeste')
         GROUP BY "Team member", month
     """
-    args= (1,)
-    trend_data = query_db(trend_query,args)
+    args2= (1,year_month)
+    trend_data = query_db(trend_query,args2)
 
     category_query = """
         SELECT 
@@ -276,8 +281,9 @@ def get_team_risk():
         'XImena','Anahi','Adalu','Karla','Rocio','Lily', 'Celeste')
         GROUP BY "Team member"
     """
-    args= (1,)
-    category_data = query_db(category_query, args)
+    args3= (1,)
+    category_data = query_db(category_query, args3)
+
     service_trend = defaultdict(list)
     for row in trend_data:
             service_trend[row["Team member"]].append((row["month"], row["serviceCount"]))
@@ -292,7 +298,7 @@ def get_team_risk():
         
         # Get trend data for this person
         history = sorted(service_trend[name], key=lambda x: x[0])
-        last_month = history[-2][1] if history else 0
+        last_month = history[-1][1] if history else 0
         avg_volume = round(statistics.mean([h[1] for h in history[:-1]]), 2) if len(history) > 1 else last_month
         drop_pct = round(((avg_volume - last_month) / avg_volume) * 100, 1) if avg_volume else 0
 

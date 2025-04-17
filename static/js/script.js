@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
     changeFiltersAndDashboard(selectedStore, selectedYear, selectedMonth, sortby);
-    teamMemberRiskReport();
+    
 
 });
 
@@ -146,7 +146,7 @@ function updateDashboard(selectedStore, selectedYear, selectedMonth, sortby) {
     // Top Influencing Channel
     displayDoughnutChart(selectedStore, selectedYear, selectedMonth);
 
-    
+    teamMemberRiskReport(selectedMonth, selectedYear);
 }
 //KIP Metrics Display   
 function displayKpiMetrics(selectedStore, selectedYear, selectedMonth){
@@ -559,10 +559,12 @@ async function displayDoughnutChart(selectedStore, selectedYear, selectedMonth) 
         console.error('Error fetching channel data:', error);
     }
 }
-function teamMemberRiskReport(){
-    fetch("/api/team-risk")
+function teamMemberRiskReport(selectedMonth, selectedYear){
+    fetch(`/api/team-risk?year=${selectedYear}&month=${selectedMonth}`)
     .then(res => res.json())
     .then(report => {
+        console.log("report")
+        console.log(report)
         const riskTable = document.getElementById("teamRiskTable");
         riskTable.innerHTML = `
         <tr>
