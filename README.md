@@ -110,8 +110,9 @@ zela-sales-dashboard/
 To identify traits linked with employee exits, we performed the following analyses, each of which contributed to our risk scoring system:
 
 ####  Monthly Service Trend Analysis
-- We analyzed service activity over time to detect signs of burnout or disengagement.
-- Employees who showed a steep decline in monthly services before exiting were flagged.
+- We examined each team member’s service volume over time to detect warning signs of burnout or disengagement.
+- A significant drop in monthly services—often greater than 30% compared to their average—was observed in many leavers.
+- This drop pattern was used as a key flag in our risk scoring model to highlight potential attrition risk.
 
 ####  Monthly Service Count
 - We calculated each team member’s average monthly service volume.
