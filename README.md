@@ -1,11 +1,44 @@
-# Project Title: Sales & Customer Analytics Dashboard for Zela Nails and Salon
-     
-## Project Overview
-     
-This project aims to develop an interactive, data-driven dashboard for Zela Nails and Salon, a premier beauty service provider with two locations. The Dashboard will give the business real-time insights into sales performance, customer behavior, team productivity, and booking trends. Visualized key performance indicators (KPIs) and data will help the business owners make future decisions and plan strategically.
-      
-## Usage & Installation Instructions
-     
+# Zela Nails: Team Member Turnover Analysis & Risk Monitoring Dashboard
+
+---
+
+## 📌 Project Overview
+
+This project is a full-stack interactive dashboard designed for **Zela Nails**, a real nail salon based in Mexico that has experienced high team member turnover. The goal is to help the business understand **why employees leave**, and build a **risk monitoring system** that provides early warnings for future staff attrition.
+
+The dashboard combines data-driven analysis, insightful visualizations, and a backend Flask API with a dynamic frontend interface.
+
+---
+
+## 💡 Introduction: Business Question & Motivation
+
+Zela Nails noticed frequent resignations and inconsistent team performance. The main business question was:
+
+> "Can we identify patterns in employee behavior before they leave?"
+
+The motivation behind this project is to use historical sales data to:
+
+- Understand **why** employees left
+- Determine **common risk traits**
+- Proactively flag current employees who may be at risk of leaving
+
+---
+
+## 🎯 Project Goals
+
+1. **Analyze the behavior of team members who left** ("leavers")
+2. **Compare them to current employees** to detect risk patterns
+3. **Develop a scoring system** to monitor current team members based on:
+   - Monthly drop in service volume
+   - Specialization (lack of category variety)
+   - Client retention ratios (total\_appointments / unique\_clients)
+   - Heavy reliance on one category (Manicure/Pedicure)
+4. Visualize all findings in a modern, filterable dashboard
+
+---
+
+## ⚙️ Usage & Installation Instructions
+
 ### Prerequisites
 
 - Python 3.10+
@@ -24,176 +57,271 @@ pip install -r requirements.txt
 ```bash
 flask run
 ```
+
 Then visit: `http://127.0.0.1:5000/`
 
 ---
 
-## Project goals
-     
-The primary business question addressed by this dashboard is: **“How can we optimize our services and increase sales at Zela Nails and Salon?”**     
+## 📁 Project Structure
 
-To achieve this, the dashboard is designed with the following key features:
-+ Real-time performance monitoring: Provide an up-to-date view of business performance for each store location.
-+ Dynamic filtering options: Allows users to filter data by year, month, and store branch, facilitating comparisons and analyses across different time periods and locations.
-+ Interactive Visualizations: Display key sales KPIs and trends through engaging charts and tables, making data interpretation user-friendly and accessible.
-+ Employee and Client insights: Identifies top-performing employees and clients, helping to recognize contributions and foster relationships.
-+ Appointment Channel Analysis: Analyses appointment booking channels and sales by service categories, providing insights into customer preferences and service performance.
-     
-## Data pre-processing/gathering steps
-     
-Data is collected from the sales records of Zela Nails and Salon. The following steps are undertaken to clean and manipulate the data:
-        
-Data Collection: Gather data from the CSV file contaaining sales records.   
-Data Cleaning: Remove duplicates, address handle missing values, and standardize data formats to ensure consistency and accuracy.    
-Data Transformation: Transform the raw data into a structured SQLite format, which facilitates efficient querying and analysis.
-
-
-
-## Analysis to support the visuals and findings
-
-The analysis focuses on calculating key metrics, including total sales,  average sale value, and number of services. These metrics are essential for understanding business performance. This resulting data is then visualized using line charts, bar charts, and doughnut charts to provide clear insights into performance trends and facilitating data-driven decision making.
-
-### Visuals and explanations 
-
-•	KPI Boxes: Display total sales, number of services, and average sale value.
-
-![Screenshot 2025-04-17 at 1 58 25 PM](https://github.com/user-attachments/assets/fe19ef0b-b5a9-4458-aed8-4d32ab46a9e3)
+```text
+zela-sales-dashboard/
+│
+├── app.py                         # Main Flask application
+├── create_db.py                   # Script to import CSV into SQLite DB
+├── requirements.txt               # Python dependencies
+├── README.md                      # Project documentation
+├── team_member_exit_analysis.ipynb # Jupyter notebook for deeper data analysis
+├── zela_nails.sqlite              # SQLite database file
+│
+├── data/
+│   └── Zela_Nails_Sales_Data.csv  # Original sales dataset
+│
+├── static/
+│   ├── css/
+│   │   └── style.css              # Dashboard styles
+│   ├── js/
+│   │   └── script.js              # Frontend logic and chart rendering
+│   └── logo.png                   # Zela Nails logo
+│
+├── templates/
+│   └── index.html                 # HTML template for dashboard UI
+│
+├── png/
+│   └── *.png                      # Screenshots and data visualizations
+```
 
 
-•	Sales Charts: Daily and monthly sales trends visualizing using line and bar charts.
+---
 
-![Screenshot 2025-04-17 at 2 05 18 PM](https://github.com/user-attachments/assets/2c01b99d-b56c-4f3a-8a65-d9a352c3976e)
+## 🗃️ Data Preprocessing & Gathering
+
+- **Source:** Actual sales data provided by the Zela Nails owner, with all sensitive personal information removed
+- Cleaned and standardized category names
+- Grouped and aggregated data for:
+  - Monthly service counts
+  - Category distributions
+  - Client visits per employee
+
+---
+
+## 📈 Analysis & Logic
+
+To identify traits linked with employee exits, we performed the following analyses, each of which contributed to our risk scoring system:
+
+####  Monthly Service Trend Analysis
+- We analyzed service activity over time to detect signs of burnout or disengagement.
+- Employees who showed a steep decline in monthly services before exiting were flagged.
+
+####  Monthly Service Count
+- We calculated each team member’s average monthly service volume.
+- If a team member consistently exceeds **300 services per month**, they are flagged for potential **burnout risk** due to overbooking.
+
+####  Client Retention Ratio
+- Defined as `total_appointments / unique_clients`
+- A **low ratio (< 1.5)** may indicate weak client relationships.
+- A **high ratio (> 2.6)** may signal that the employee has a loyal base and might be preparing to leave with clients.
+
+####  Category Dominance Check
+- We examined each team member’s service mix.
+- If **Manicure/Pedicure** accounts for over 50% of their services, we flag it as a risk factor tied to specialization fatigue, lower creativity, or limited career growth.
+
+---
+
+## 📊 Visuals & Explanations
+
+This dashboard was built using Flask and JavaScript to create a responsive, interactive experience for salon managers. It includes both high-level KPIs and granular drilldowns for client and team insights.
+
+Each chart in the dashboard is powered by JS and populated via Flask API:
+
+- **KPI Boxes:** Total Sales, Number of Sales, Avg. Sale per Customer
+- **Line Chart:** Daily sales for selected month
+- **Bar Chart:** Monthly sales for selected year
+- **Horizontal Bar:** Top 5 team members by sales (sortable by volume or service count)
+- **Client Table:** Top clients and ability to view visit history
+- **Donut Chart:** Appointment channel breakdown
+- **Category Bar Chart:** Sales by service type
+- **Risk Monitor:** Flags high-risk employees with reasoning
+
+---
+
+## 🧠 Additional Logic Example (Python Snippet)
+
+```python
+# Risk score calculation logic
+score = 0
+
+# Check for client retention extremes (disengagement or poaching risk)
+if retention < 2.0 or retention > 2.6:
+    score += 1
+
+# Drop in service volume (burnout indicator)
+if drop_pct > 30:
+    score += 1
+
+# Over-specialization in Manicure/Pedicure
+if mani_ratio > 0.5:
+    score += 1
+
+# High monthly service volume (risk of burnout)
+if avg_volume > 300:
+    score += 1
+
+# Determine risk level based on total score
+level = "High" if score >= 3 else "Medium" if score >= 1 else "Low"
+```
+
+---
+
+### 🖱️ Interactive Features
+
+- Clicking a **client name** in the Top Clients table opens a modal showing their **entire visit history**, including date, service, provider, and spend.
+- The **Top Team Members** section includes a dropdown to sort by either **sales amount** or **number of services**.
+- Dropdown filters allow management to switch between **branch, year, and month** — the dashboard updates in real-time.
+
+---
+
+## 📌 Major Findings
+
+### 📉 Monthly Service Trends
+
+<img src="png/monthly_service_count.png" alt="Monthly Service Trends" width="600"/>
+
+- Several team members, such as Evelyn and Adalu, showed **significant drop-offs** in monthly service volume prior to leaving.
+- These declines are early signals of burnout or disengagement.
+
+### 📊 Service Category Specialization
+
+<img src="png/service_category_ex_team_members.png" alt="Category Comparison" width="600"/>
+
+_Service category distribution for former team members_
+
+<img src="png/service_category_current_team_members.png" alt="Category Comparison" width="600"/>
+
+_Service category distribution for current team members_
+
+- Most leavers had **Manicure/Pedicure** as their dominant category.
+- Possible reasons:
+  - **Entry-Level Track:** Often the first service new hires are trained on
+  - **Low Variety:** Lack of creative or skill development opportunities
+  - **Lower Pay Potential:** May earn less per hour than higher-skill services
+
+### 🤝 Client Retention Ratio
+
+- Team members with **retention ratio < 1.5** often had **weak client bonds** → possibly due to fit or service quality.
+- Team members with **retention ratio > 2.6** were **highly valued** and possibly **poised to go independent**, taking clients with them.
+
+---
+
+- Most employees who left had:
+  - A noticeable **drop in service volume** 1–2 months before exit
+  - A strong bias toward **Manicure/Pedicure services only**
+  - **Low or extremely high retention ratios**, indicating either weak client bonds or intent to leave with clientele
+- Current team is more balanced — but some show early risk signs
+
+---
+
+## ⚠️ Limitations & Future Development
+
+- The dataset does **not contain a direct indicator** of whether an employee is current or former. To address this, a **hardcoded list** of names was used to identify team members who had left. Ideally, this should be **dynamically tracked** via a status field in the database.
+- The current risk model is **heuristic**, not machine-learned, which means it relies on rule-based thresholds rather than predictive algorithms.
+- **Employee feedback and internal HR data** (e.g., schedule changes, complaints, tenure) are not yet included, limiting behavioral context.
+- **External factors** such as pay scale, promotions, or life events are not captured but could influence turnover.
+- **No continuous auto-refresh or alerts** — risk flags must be manually reviewed in the dashboard.
+
+### Future improvements:
+- Add login/authentication for manager view
+- Allow manual annotation of high-risk employees
+- Use ML to predict turnover probability
+- Track and store employee status dynamically (e.g., onboarding, active, former)
+- Integrate scheduling or HR data for deeper behavioral insights
+
+---
+
+## 💼 Business Impact
+
+The Risk Monitor helps Zela Nails take **proactive action** to reduce costly turnover. By catching red flags early, management can:
+
+- Check in with at-risk staff
+- Offer training or support to improve variety and engagement
+- Avoid operational disruptions and client dissatisfaction
+
+This data-driven system turns historical patterns into actionable insights for **retention strategy**.
+
+---
+
+## 🧑‍💻 About the Team
+
+This project was a team collaboration built by:
+
+- **Dagim Girma**: Led the project vision and data analysis. Developed the risk monitoring logic, conducted exploratory analysis, and helped build frontend components.
+- **Tiya Francy**: Contributed significantly to the backend Flask API routes and also assisted with frontend JavaScript chart integration.
+- **Francisco Gonzalez**: Focused on data cleaning, analytical logic, and frontend UI design, using **Bootstrap and custom CSS** to make the dashboard visually appealing and responsive.
+
+Technologies used:
+
+- **Python** for backend data processing
+- **Flask** for API routing and server setup
+- **SQLite** as a lightweight data storage engine
+- **JavaScript + Chart.js** for dynamic and modern chart rendering
+- **Bootstrap** for a clean and responsive UI
+
+---
+
+## ✅ Conclusion
+
+This project gives Zela Nails a **clear, visual, and data-backed way** to understand staff turnover. By flagging at-risk employees early, the business can take **proactive steps** to retain talent and improve team satisfaction.
+
+---
+
+## 📷 Screenshots
+
+### 📌 KPI Boxes
+![Screenshot of KPI Boxes](https://github.com/user-attachments/assets/fe19ef0b-b5a9-4458-aed8-4d32ab46a9e3)
+_Display total sales, number of services, and average sale value._
+
+### 📈 Sales Charts
+![Screenshot of Sales Charts](https://github.com/user-attachments/assets/2c01b99d-b56c-4f3a-8a65-d9a352c3976e)
+_Daily and monthly sales trends visualized using line and bar charts._
+
+### 👥 Top Members and Clients
+![Screenshot of Top Members and Clients](https://github.com/user-attachments/assets/a00a0f0b-ae8e-436e-bd90-9b29e0a4741a)
+_Displays top-performing team members, clients by total sales and doughnut chart showing appointment booking channels ._
+
+### 📜 Pop-up Client History
+![Screenshot of pop up client history](https://github.com/user-attachments/assets/8073a1ca-c5b6-4676-805f-988246971993)
+_Displays all past visits by client, including services, team member, and amount spent._
+
+### 📊 Category & Risk Monitor
+![Screenshot of Risk Monitor](https://github.com/user-attachments/assets/60b70692-c6bf-4327-8105-57e65a3c3873)
+_Shows category sales chart and risk levels assigned to team members._
+
+---
+
+## 🌟 Google Reviews Integration
+
+At the bottom of the dashboard, a widget displays **live Google Reviews** for Zela Nails. This provides:
+
+- Real-time customer feedback
+- A quick snapshot of client satisfaction
+- Added social proof for the business
+
+The integration is handled using the Elfsight platform and seamlessly embeds into the dashboard interface.
+
+
+![Screenshot of google reiews ](https://github.com/user-attachments/assets/05e5286e-0e7a-43f3-9789-d41f2a0a5a92)
 
 
 
-•	Top members and Clients: Lists of top-performing team members and clients with a pop-up client history.
+---
 
-•	Doughnut Chart: Visual representation of appoinments by channel.
+## 📚 References
 
-![Screenshot 2025-04-17 at 1 59 03 PM](https://github.com/user-attachments/assets/a00a0f0b-ae8e-436e-bd90-9b29e0a4741a)
-
-![Screenshot 2025-04-17 at 2 14 35 PM](https://github.com/user-attachments/assets/8073a1ca-c5b6-4676-805f-988246971993)
-
-
-
-•	Category Sales chart: Breakdown of sales by services.
-
-•	Team member risk monitor 
-
-
-![Screenshot 2025-04-17 at 6 28 15 PM](https://github.com/user-attachments/assets/60b70692-c6bf-4327-8105-57e65a3c3873)
+- Dataset: Internal Zela Nails operational data
+- Icons/Designs: Bootstrap, Chart.js, Plotly
+- Logic Inspired by: HR analytics turnover research from Kaggle case studies
 
 
 
-
-## Additional explanations
-       
-The dashboard is built using HTML, CSS, and JavaScript, leveraging libraries such as Bootstrap for styling and Chart.js and plotly for data visualization. The application is designed to be responsive and user- friendly.
-           
-|Layer	        |Technology|
-|---------------|----------|
-|Frontend	|HTML, CSS, JavaScript, Plotly.js / Chart.js|
-|Backend	|Flask   (Python)|
-|Database	|SQLite|
-|Data Source	|Zela Nails & Salon sales data|
-
-
-In addition to the core functionalities of the dashboard, we have integrated a **free Google Review widget** into the project. This widget allows users to display and manage customer reviews directly on the dashboard, providing valuable social proof and enhancing customer engagement. By showcasing real-time feedback from clients, Zela Nails can better understand customer satisfaction and make informed decisions to improve services.
-
-<img width="1327" alt="Screenshot 2025-04-17 at 11 30 35 AM" src="https://github.com/user-attachments/assets/05e5286e-0e7a-43f3-9789-d41f2a0a5a92" />
-
-
-## Major findings
-      
-      
-##### Peak Sales Period
-
-The analysis indicates that Zela Nails and Salon experiences peak sales on Fridays and Saturdays. This trend suggests that customers prefer to book their beauty services on weekends, likely due to work commitments during the week and social events occurring on weekends. By understanding this pattern, the salon can optimize staffing and inventory levels to effectively meet the increased demand during these busy periods.
-
-##### Sales Performance
-
-In 2023, the highest sales were recorded in December, coinciding with the holiday season when customers are more inclined to indulge in beauty services. June and August also saw elevated sales, likely related to the school year’s closing and opening. Conversely, January and February experienced the lowest sales, indicating a potential seasonal dip.          
-           
-In 2024, sales remained consistent throughout the year; however, a significant drop occurred in August and September due to employee departures. After addressing staffing issues, the salon rebounded and achieved its highest sales of the year in October.         
-          
-These insights can inform marketing strategies, such as offering discounts on weekdays or launching promotional campaigns during slower months to boost sales.
-
-##### Employee Performance
-
-      
-The dashboard identified top-performing employees based on sales generated and the number of services provided. Recognizing these individuals not only boosts morale but also offers an opportunity to analyze their techniques and customer interaction styles, which can be shared as best practices across the team.    
-      
-From the team member risk monitor, we can identify those who are highly skilled and may require additional support to ensure their satisfaction. Offering incentives or bonuses can maintain high performance, reduce turnover, and encourage all team members to strive for excellence by highlighting the rewards available. Additionally, training new team members in these best practices can help prevent potential staff departures, safeguarding the business's stability and success.
-
-##### Appointment Channel Analysis
-     
-All sales in 2023 were conducted through walk-ins or offline channels. Online services, including Instagram, the "Book Now" link, and bookings through the Fresha app, were introduced in 2024.    
-     
-Despite over 40% of appointments still being made through offline channels, Instagram has demonstrated consistent growth, particularly in 2025, indicating that marketing efforts on social media are effectively reaching customers. Additionally, the "Book Now" link and Fresha app are utilized by customers from these social media platforms to book their appointments.    
-     
-##### Customer Review
-
-Following are some of the customer patterns:   
-     
-Oldest Customers: The salon's most loyal clients include Sin Cita, Valeria Galvan, Dany De la Garza, Lore Gamez, Adriana Perez, and Andrea Martinez. These customers visit multiple times each month, spending between $300 and $500 per visit.       
-      
-Lost Customers: Regina Carral, Magaly Saenz, and Natalia Gasson are among the clients who have not returned after their initial visits. Some of these customers did revisit briefly but ultimately did not continue their support.      
-     
-Regained Customers: Lindsay Powers is a notable example of a client who was lost in May 2023 but returned in November 2024. She has since become a regular, visiting twice a month and spending under $500 each time.    
-      
-Recent Regulars: New regular customers include Cynthia Cuesta, Patricia Vidal, and Amadita, indicating a positive trend in client retention and engagement.   
-     
-##### Sales Review by Category
-          
-In January 2023, sales for manicure and pedicure services reached $100,000, with acrylics generating $50,000 and hair services contributing $10,000. Throughout the year, manicure and pedicure sales consistently increased, peaking at $183,000 in August. Acrylic sales also experienced significant growth, reaching $100,000 in November and $145,000 in December.     
-      
-In 2024, acrylic sales surged to $156,000 in February, while gel and regular polish gained popularity, generating nearly $55,000. Manicure and pedicure services also contributed $55,000. However, September saw a decline in sales, with acrylics dropping to $68,000, largely due to an employee shortage that affected overall performance. Sales rebounded in October and remained strong through December, with acrylics at $130,000, gel and regular polish at $78,000, manicure and pedicure services at $51,000, and hair services at $40,000. Overall, the data reflects a robust performance in manicure and pedicure services as well as acrylics, despite fluctuations in other categories throughout the year.      
-	
-## Limitations and Future Development
-      
-#### Data limitations 
-The analysis is subject to certain data limitations, including:
-- Workload and Scheduling: We lack comprehensive data on employee workloads and schedules, which affects our ability to assess overbooking or underbooking situations.
-- Client Spending Behavior: Insufficient data on client spending behavior limits our understanding of customer preferences and financial capacity.
-- Employee Status: The system does not differentiate between current and former employees, which restricts our ability to create fully dynamic analyses.
-
-#### Future enhancements
-To address these limitations, several enhancements are planned for future development:
-- Enhanced Data Collection: Implementing systems to capture detailed workload and scheduling information to better analyze booking patterns.
-- Client Insights: Gathering more comprehensive data on client spending behavior to inform marketing strategies and service offerings.
-- Dynamic Employee Analysis: Developing a system that accurately tracks current and former employees to enable more dynamic reporting and analysis.
-- Risk Analysis: Incorporating team member risk analysis into future calculations to better understand potential impacts on service delivery and performance.
-
-These enhancements will help improve the accuracy and depth of our analysis, ultimately leading to more informed decision-making.
-
-
-## Conclusion   
-     
-In summary, this dashboard serves as a vital tool for Zela Nails, addressing the key business question of how to optimize services and increase sales. Through comprehensive data collection and analysis, we have calculated essential metrics such as total sales, average sale value, and service counts, which are visualized using interactive charts to reveal performance trends.      
-         
-While the current analysis provides valuable insights, it is important to acknowledge certain limitations, including gaps in data related to employee workloads, client spending behavior, and the differentiation between current and former employees. These limitations highlight the need for enhanced data collection and analysis methods in the future.
-
-Looking ahead, the proposed enhancements aim to address these gaps by implementing systems for better workload tracking, gathering more detailed client insights, and developing dynamic employee analysis capabilities. By continuously improving our data processes and analysis techniques, we can further empower the Zela Nails team to make informed, data-driven decisions that enhance service offerings and drive sales growth.      
-      
-## References   
-
-Our Instructor, Tuncay E. Dogan, provided great assistance in completing this project. He shared many helpful website links to explore new ideas in data visualization and improve our coding skills.   
-
-Various internet sites such as Stack Overflow, GeeksForGeeks, and others were also helpful in times of error encounters and code generation.    
-
-Other documentation references:   
-      
-Bootstrap Documentation: https://getbootstrap.com/     
-Chart.js Documentation: https://www.chartjs.org/     
-Flask Documentation: https://flask.palletsprojects.com/en/stable/     
-Plotly Documentation: https://plotly.com/javascript/     
-
-
-
-### Team Members
-
-- Dagim Girma: Database/Backend
-- Francisco Gonzalez: Frontend
-- Tiya Francy: Backend
 
 

@@ -318,14 +318,14 @@ def get_team_risk():
         mani_ratio = 0
         if name in service_summary and service_summary[name]["total"] > 0:
             mani_ratio = service_summary[name]["mani_pedi"] / service_summary[name]["total"]
+
         # Risk score
-        
         score = 0
         if retention < 2.0 or retention > 2.6:
             score += 1
-        if drop_pct > 20: score += 1
+        if drop_pct > 30: score += 1
         if mani_ratio > 0.5: score += 1
-        if avg_volume > 323: score += 1
+        if avg_volume > 300: score += 1
 
         level = "High" if score >= 3 else "Medium" if score >= 1 else "Low"
 
