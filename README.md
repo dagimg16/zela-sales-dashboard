@@ -73,6 +73,7 @@ zela-sales-dashboard/
 ├── README.md                      # Project documentation
 ├── team_member_exit_analysis.ipynb # Jupyter notebook for deeper data analysis
 ├── zela_nails.sqlite              # SQLite database file
+├── render.yaml                    # render deployment config
 │
 ├── data/
 │   └── Zela_Nails_Sales_Data.csv  # Original sales dataset
