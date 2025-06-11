@@ -10,6 +10,15 @@ The dashboard combines data-driven analysis, insightful visualizations, and a ba
 
 ---
 
+## 🚀 Live Demo
+
+You can explore the deployed dashboard live here:
+👉 [Zela Nails Dashboard on Render](https://zela-sales-dashboard.onrender.com/)
+
+> ⚠️ Please allow a few seconds for the Render server to spin up if it's been idle.
+
+---
+
 ## 💡 Introduction: Business Question & Motivation
 
 Zela Nails noticed frequent resignations and inconsistent team performance. The main business question was:
